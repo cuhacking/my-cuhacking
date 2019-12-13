@@ -30,10 +30,11 @@ const App = () => {
     <Router>
       <Switch>
         <Route path='/login' component={Login} />
-        <Route path='/register' component={Register} />
-        <Route path='/resetPassword' component={ResetPassword} />
+        {/* <Route path='/register' component={Register} />
+        <Route path='/resetPassword' component={ResetPassword} /> */}
         {/* <Route path='/application' component={Application} /> */}
         {/* <Route path='/status' component={Application} /> */}
+        <Redirect to='/login' />
         <Route component={NotFound} />
       </Switch>
     </Router>

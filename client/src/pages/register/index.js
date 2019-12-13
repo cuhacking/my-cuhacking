@@ -1,5 +1,4 @@
 import React from 'react'
-import Cookies from 'js-cookie'
 import { Helmet } from 'react-helmet'
 import { Redirect, Link } from 'react-router-dom'
 import 'index.css'
@@ -18,10 +17,7 @@ class Create extends React.Component {
   constructor(props) {
     super(props)
 
-    const token = Cookies.get('token')
-    const email = Cookies.get('email')
-
-    this.state = { email: '', password: '', password2: '', validForm: false, error: '', moveOn: token && email }
+    this.state = { email: '', password: '', password2: '', validForm: false, error: '' }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
@@ -103,9 +99,6 @@ class Create extends React.Component {
       .then(res => {
         res.json().then(body => {
           if (res.status === 201) {
-            Cookies.set('email', body.user.email, expiry)
-            Cookies.set('token', body.user.token, expiry)
-
             this.props.history.push('application')
           } else if (res.status === 409) {
             this.setState({ error: 'Email already in use.' })

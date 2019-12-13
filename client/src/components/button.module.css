@@ -1,13 +1,12 @@
 .button,
-.disabled,
-.solidButton,
-.solidDisabled {
+.disabled {
+  box-sizing: border-box;
   display: inline-block;
   padding: 12px 15px;
   margin: 15px;
   font-size: 18px;
-  border: 2px solid var(--primaryColour);
-  min-width: 150px;
+  border: 2px solid;
+  width: 175px;
   text-align: center;
   text-decoration: none;
   font-family: 'Montserrat', sans-serif;
@@ -17,6 +16,7 @@
 
 .button {
   background-color: var(--backgroundColour);
+  border-color: var(--primaryColour);
   color: var(--primaryColour);
 }
 
@@ -26,49 +26,19 @@
   color: #999999;
 }
 
-.solidButton {
-  user-select: none;
-  background-color: var(--primaryColour);
-  color: white;
-}
-
-.solidDisabled {
-  user-select: none;
-  background-color: #999999;
-  border-color: #999999;
-  color: white;
-}
-
 @media only screen and (min-width: 700px) {
   .button:hover {
     background-color: var(--primaryColour);
     color: white;
     cursor: pointer;
   }
-
-  .solidButton:hover {
-    background-color: var(--darkPrimaryColour);
-    border-color: var(--darkPrimaryColour);
-    color: white;
-    cursor: pointer;
-  }
 }
 
 @media (prefers-color-scheme: dark) {
-  .button,
-  .solidButton {
-    border-color: var(--secondaryColour);
-  }
-
   .button {
+    border-color: var(--secondaryColour);
     background-color: var(--backgroundColour);
     color: var(--secondaryColour);
-  }
-
-  .solidButton {
-    user-select: none;
-    background-color: var(--secondaryColour);
-    color: white;
   }
 
   @media only screen and (min-width: 700px) {
