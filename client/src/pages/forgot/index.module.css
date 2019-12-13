@@ -14,13 +14,11 @@
   }
 }
 
-.logo {
-  background-image: url('../../assets/smallLogo.svg');
-  width: 200px;
-  height: 200px;
+.container > h1 {
+  margin-bottom: 0;
 }
 
-.loginPage {
+.forgotPage {
   height: 100vh;
   padding: 0;
   margin: 0;
@@ -32,12 +30,12 @@
   background-size: cover;
 }
 
-.loginContainer {
+.forgotContainer {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  width: 100vw;
-  max-width: calc(var(--contentWidth) / 3);
+  width: 100%;
+  max-width: calc(var(--contentWidth) / 2);
   padding: 0 2vw;
 }
 
@@ -49,11 +47,6 @@
   margin: 2vh 0;
 }
 
-.resetPassword {
-  align-self: flex-end;
-  margin: 0;
-}
-
 .errorMessage {
   color: red;
   text-align: center;
@@ -62,12 +55,20 @@
   margin: 0;
 }
 
+/* .logo {
+  background-image: url('../../assets/smallLogo.svg');
+  width: 200px;
+  height: 200px;
+}
+
 @media (prefers-color-scheme: dark) {
   .logo {
     background-image: url('../../assets/smallLogo-dark.svg');
   }
+} */
 
-  .loginPage {
+@media (prefers-color-scheme: dark) {
+  .forgotPage {
     background-image: url('../../assets/bkg-dark.svg');
   }
 }

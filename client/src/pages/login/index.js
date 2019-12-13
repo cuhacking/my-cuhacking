@@ -1,34 +1,57 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { Redirect, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Input, Button, Navbar, Password } from 'components'
+import useAuth from 'hooks/useAuth'
 import styles from './index.module.css'
 
 function Login() {
+  const auth = useAuth()
   const [validForm, setValidity] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
 
-  const handleSubmit = event => {
-    console.log(email, password)
-    alert(`email: ${email} | password ${password}`)
+  // Side effect which enables the register button if the condition is met
+  useEffect(() => {
+    setValidity(email.length > 0 && password.length >= 8)
+  }, [email, password])
+
+  const handleSubmit = async event => {
+    event.preventDefault()
+
+    try {
+      await auth.login(email, password)
+      if (auth.user) {
+        console.log('YAY')
+      }
+    } catch (error) {
+      switch (error.code) {
+        case 'auth/user-disabled':
+          return setErrorMessage('That email has been disabled. Contact development@cuhacking.com for support.')
+        case 'auth/invalid-email':
+          return setErrorMessage('That email is invalid.')
+        case 'auth/user-not-found':
+        case 'auth/wrong-password':
+          return setErrorMessage('Incorrect email or password.')
+        default:
+          return setErrorMessage('Uh oh! Something went wrong.')
+      }
+    }
   }
 
   const handleChange = async event => {
+    setErrorMessage('')
     const { name, value } = event.target
+
     switch (name) {
       case 'email':
-        await setEmail(value)
-        break
+        return setEmail(value)
       case 'password':
-        await setPassword(value)
-        break
+        return setPassword(value)
       default:
-        break
+        return
     }
-
-    // console.log(email, password)
-    setValidity(email.length !== 0 && password.length >= 8)
   }
 
   return (
@@ -51,10 +74,10 @@ function Login() {
               required={true}
             />
             <p className={styles.resetPassword}>
-              <a href='/resetPassword'> Forgot your password? </a>
+              <Link to='/forgot'>Forgot your password?</Link>
             </p>
           </div>
-          {/* <p className="error-message"> {this.state.error} </p> */}
+          <p className={styles.errorMessage}>{errorMessage}</p>
           <div className={styles.formPart}>
             <Button type='submit' label='Login' disabled={!validForm} />
             <p>
@@ -68,182 +91,3 @@ function Login() {
 }
 
 export default Login
-
-// class LoginComponent extends React.Component {
-//   // Initial login page to the application, ask for email/password by default.
-//   // To think about - do we want to add Sign in with Google/Apple/etc...
-//   // This should also branch to a create account page if they don't already have one?
-
-//   constructor(props) {
-//     super(props)
-
-//     const token = Cookies.get('token')
-//     const email = Cookies.get('email')
-
-//     this.state = {
-//       email: email || '',
-//       password: '',
-//       validForm: false,
-//       error: '',
-//       success: token ? true : false,
-//       token: token || null
-//     }
-//     this.handleSubmit = this.handleSubmit.bind(this)
-//   }
-
-//   handleChange = async event => {
-//     switch (event.target.name) {
-//       case 'email':
-//         await this.setState({ email: event.target.value })
-//         break
-//       case 'password':
-//         await this.setState({ password: event.target.value })
-//         break
-//       default:
-//         break
-//     }
-
-//     this.state.email.length !== 0 && this.state.password.length >= 8
-//       ? this.setState({ validForm: true })
-//       : this.setState({ validForm: false })
-//   }
-
-//   handleSubmit(event) {
-//     event.preventDefault()
-
-//     const options = {
-//       method: 'POST',
-//       body: JSON.stringify({
-//         email: this.state.email,
-//         password: this.state.password
-//       }),
-//       headers: {
-//         'Access-Control-Request-Headers': 'POST',
-//         'Content-Type': 'application/json'
-//       }
-//     }
-
-//     const expiry = {
-//       expires: 1 / 23 // A little less than a hour so nothing weird happens
-//     }
-
-//     fetch(`${API_URL}/users/signin`, options)
-//       .then(res => {
-//         if (res.status === 200) {
-//           res.json().then(body => {
-//             Cookies.set('email', this.state.email, expiry)
-//             Cookies.set('token', body.token, expiry)
-
-//             this.setState({
-//               token: res.token,
-//               success: true
-//             })
-//           })
-//         } else if (res.status === 401) {
-//           // Incorrect password
-//           this.setState({ error: 'Incorrect email or password.' })
-//         } else if (res.status === 403) {
-//           // Failure in parsing the token or creating the user in firestore.
-//           this.setState({ error: "Uh-oh! That didn't look right. Try again?" })
-//         } else {
-//           this.setState({ error: "I'm not sure what happened. Try again?" })
-//         }
-//       })
-//       .catch(err => {
-//         this.setState({ error: "Uh-oh! That didn't work. Try again?" })
-//       })
-//   }
-
-//   render() {
-//     if (this.state.success) {
-//       return (
-//         <Redirect
-//           to={{
-//             pathname: '/application',
-//             email: this.state.email,
-//             token: this.state.token
-//           }}
-//         />
-//       )
-//     }
-
-//     return (
-//       <div className={styles.loginPage}>
-//         <Helmet>
-//           <title>Login | cuHacking 2020</title>
-//         </Helmet>
-//         <Navbar />
-//         <div className={styles.container}>
-//           <h2>Welcome to cuHacking!</h2>
-//           <p>
-//             Don't have an account? <Link to='/register'> Sign up now.</Link>
-//           </p>
-//           <form className={styles.loginContainer} onSubmit={this.handleSubmit}>
-//             <Input
-//               type='email'
-//               name='email'
-//               label='Email'
-//               value={this.state.email}
-//               onChange={this.handleChange}
-//               required={true}
-//             />
-//             <Password
-//               type='password'
-//               name='password'
-//               label='Password'
-//               value={this.state.password}
-//               onChange={this.handleChange}
-//               required={true}
-//             />
-//             {/* <p className={styles.forgotPassword}><a href="/forgot"> Forgot your password? </a></p> */}
-//             <Button type='submit' label='Login' disabled={!this.state.validForm} />
-//             <p className='error-message'> {this.state.error} </p>
-//           </form>
-//         </div>
-//       </div>
-//     )
-//   }
-// }
-
-// // const Login = () => {
-// //   const auth = useAuth()
-// //   const [validForm, validateForm] = useState(false)
-// //   const [creds, setCreds] = useState({
-// //     email: '',
-// //     password: ''
-// //   })
-
-// //   const onChange = event => {
-// //     event.preventDefault()
-// //     setCreds({...creds, [event.target.name]: event.target.value})
-
-// //     validateForm(creds.email.length !== 0 && creds.password.length >= 8)
-// //   }
-
-// //   const onSubmit = async () => {
-// //     const success = await auth.login(creds.email, creds.password)
-
-// //     if (success) {
-// //       console.log('SUCCESS')
-// //       // return <Redirect to='/'/>
-// //     }
-// //   }
-
-// //   return (
-// //     <div className={styles.loginPage}>
-// //       <Navbar />
-// //       <div className={styles.container}>
-// //         <h2>Welcome to cuHacking!</h2>
-// //         <p>Don't have an account? <a href="/register"> Click here.</a></p>
-// //         <form className={styles.loginContainer} onSubmit={onSubmit} onChange={onChange} >
-// //           <Input type="email" name="email" label="Email" required={true}/>
-// //           <Password type="password" name="password" label="Password" required={true}/>
-// //           {/* <p className={styles.forgotPassword}><a href="/forgot"> Forgot your password? </a></p> */}
-// //           <Button type="submit"   label="Login" disabled={!validForm}/>
-// //           {/* <p className="error-message"> {this.state.error} </p> */}
-// //         </form>
-// //       </div>
-// //     </div>
-// //   )
-// // }
-// // export default LoginComponent;

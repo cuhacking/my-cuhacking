@@ -1,7 +1,57 @@
-import React from 'react'
-import 'index.css'
+import React, { useState } from 'react'
 import { Input, Button, Navbar } from 'components'
+import useAuth from 'hooks/useAuth'
 import styles from './index.module.css'
+
+const ResetPassword = () => {
+  const auth = useAuth()
+  const [email, setEmail] = useState('')
+  const [message, setMessage] = useState('Enter your email address to reset your password.')
+  const [isSubmitted, submit] = useState(false)
+
+  const handleSubmit = async event => {
+    event.preventDefault()
+
+    try {
+      await auth.resetPassword(email)
+      if (auth.user) {
+        console.log('YAY')
+      }
+    } catch (error) {
+      // switch (error.code) {
+      //   case 'auth/email-already-in-use':
+      //     return setErrorMessage('That email is already in use.')
+      //   case 'auth/invalid-email':
+      //     return setErrorMessage('That email is invalid.')
+      //   case 'auth/weak-password':
+      //     return setErrorMessage('Your password is too weak.')
+      //   default:
+      //     return setErrorMessage('Uh oh! Something went wrong.')
+      // }
+    }
+  }
+
+  return (
+    <div className={styles.resetPage}>
+      <Navbar />
+      <div className={styles.container}>
+        <h2>Forgot your password?</h2>
+        <p>{message}</p>
+        <form className={isSubmitted ? styles.formVisible : styles.formInvisible} onSubmit={this.handleSubmit}>
+          <Input
+            type='email'
+            name='email'
+            label='Email'
+            value={this.state.email}
+            onChange={this.handleChange}
+            required={true}
+          />
+          <Button type='submit' label='Reset Password' disabled={!this.state.validForm} />
+        </form>
+      </div>
+    </div>
+  )
+}
 
 class Forgot extends React.Component {
   // Initial login page to the application, ask for email/password by default.

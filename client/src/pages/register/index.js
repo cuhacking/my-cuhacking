@@ -1,170 +1,141 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { Redirect, Link } from 'react-router-dom'
-import 'index.css'
-import { Input, Button, Navbar, Password } from 'components'
-import styles from './index.module.css'
+import { Link, useHistory } from 'react-router-dom'
 import zxcvbn from 'zxcvbn'
+import { Input, Button, Navbar, Password } from 'components'
+import useAuth from 'hooks/useAuth'
+import styles from './index.module.css'
 
-const API_URL = 'https://cuhacking.com/api'
-// const API_URL = 'http://localhost:3000/api-dev'
+const PasswordStrengthMeter = ({ password }) => {
+  const strength = password.length >= 8 ? zxcvbn(password).score : -1
 
-class Create extends React.Component {
-  // Initial login page to the application, ask for email/password by default.
-  // To think about - do we want to add Sign in with Google/Apple/etc...
-  // This should also branch to a create account page if they don't already have one?
-
-  constructor(props) {
-    super(props)
-
-    this.state = { email: '', password: '', password2: '', validForm: false, error: '' }
-    this.handleChange = this.handleChange.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
-  }
-
-  PasswordStrengthMeter() {
-    var strength
-    this.state.password.length >= 8 ? (strength = zxcvbn(this.state.password).score) : (strength = -1)
-
-    function label(strength) {
-      switch (strength) {
-        case -1:
-          return 'Too short'
-        case 0:
-          return 'Weak'
-        case 1:
-          return 'Weak'
-        case 2:
-          return 'Fair'
-        case 3:
-          return 'Good'
-        case 4:
-          return 'Strong'
-        default:
-          return 'Weak'
-      }
-    }
-
-    return (
-      <div className={styles.PasswordStrengthMeter}>
-        <br />
-        <strong>Password strength: </strong> {label(strength)}
-      </div>
-    )
-  }
-
-  validatePassword() {
-    return this.state.password.length >= 8 && this.state.password === this.state.password2
-  }
-
-  handleChange = async event => {
-    this.setState({ error: '' })
-
-    switch (event.target.name) {
-      case 'email':
-        await this.setState({ email: event.target.value })
-        break
-      case 'pw':
-        await this.setState({ password: event.target.value })
-        break
-      case 'pw2':
-        await this.setState({ password2: event.target.value })
-        break
+  const label = strength => {
+    switch (strength) {
+      case -1:
+        return 'Too short'
+      case 2:
+        return 'Fair'
+      case 3:
+        return 'Good'
+      case 4:
+        return 'Strong'
+      case 0:
+      case 1:
       default:
-        break
+        return 'Weak'
     }
-    this.validatePassword() ? this.setState({ validForm: true }) : this.setState({ validForm: false })
   }
 
-  handleSubmit(event) {
+  return (
+    <div className={styles.passwordStrengthMeter}>
+      <br />
+      Password strength
+      <br />
+      <strong>{label(strength)}</strong>
+    </div>
+  )
+}
+
+const Register = () => {
+  const auth = useAuth()
+  const history = useHistory()
+  const [validForm, setValidity] = useState(false)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmation, setConfirmation] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
+
+  // Side effect which enables the login button if the condition is met
+  useEffect(() => {
+    setValidity(email.length > 0 && password.length >= 8 && password === confirmation)
+  }, [email, password, confirmation])
+
+  const handleSubmit = async event => {
     event.preventDefault()
 
-    const options = {
-      method: 'POST',
-      body: JSON.stringify({
-        email: this.state.email,
-        password: this.state.password
-      }),
-      headers: {
-        'Access-Control-Request-Headers': 'POST',
-        'Content-Type': 'application/json'
+    try {
+      await auth.register(email, password)
+      if (auth.user) {
+        console.log('YAY')
+      }
+    } catch (error) {
+      switch (error.code) {
+        case 'auth/email-already-in-use':
+          return setErrorMessage('That email is already in use.')
+        case 'auth/invalid-email':
+          return setErrorMessage('That email is invalid.')
+        case 'auth/weak-password':
+          return setErrorMessage('Your password is too weak.')
+        default:
+          return setErrorMessage('Uh oh! Something went wrong.')
       }
     }
-
-    const expiry = {
-      expires: 1 / 23 // A little less than an hour, things fail if the user still has an expired token
-    }
-
-    fetch(`${API_URL}/users/register`, options)
-      .then(res => {
-        res.json().then(body => {
-          if (res.status === 201) {
-            this.props.history.push('application')
-          } else if (res.status === 409) {
-            this.setState({ error: 'Email already in use.' })
-          } else if (res.status === 501) {
-            // Failure in parsing the token or creating the user in firestore.
-            this.setState({ error: '501 - Something went wrong on our end! Try it a minute?' })
-          } else {
-            this.setState({ error: 'UNKNOWN STATUS CODE Uh-oh! Something went wrong. Try again?' })
-          }
-        })
-      })
-      .catch(err => {
-        this.setState({ error: "Uh-oh! That didn't work. Try again?" })
-      })
   }
 
-  render() {
-    if (this.state.moveOn) {
-      return <Redirect to='/' />
-    }
+  const handleChange = event => {
+    setErrorMessage('')
+    const { name, value } = event.target
 
-    return (
-      <div className={styles.loginPage}>
-        <Helmet>
-          <title>Register | cuHacking 2020</title>
-        </Helmet>
-        <Navbar />
-        <div className={styles.container}>
-          <h2>Create your cuHacking account.</h2>
-          <p>
-            Already have an account? <Link to='/login'>Click here to login.</Link>
-          </p>
-          <form className={styles.loginContainer} onSubmit={this.handleSubmit}>
+    switch (name) {
+      case 'email':
+        return setEmail(value)
+      case 'pw':
+        return setPassword(value)
+      case 'pw2':
+        return setConfirmation(value)
+      default:
+        return
+    }
+  }
+
+  return (
+    <div className={styles.registerPage}>
+      <Helmet>
+        <title>Register | My cuHacking</title>
+      </Helmet>
+      <Navbar />
+      <div className={styles.container}>
+        <div className={styles.logo} />
+        <form className={styles.registerContainer} onSubmit={handleSubmit}>
+          <div className={styles.formPart}>
             <Input
-              placeholder='email@example.com'
+              placeholder='example@domain.com'
               name='email'
               type='email'
               label='Email'
-              value={this.state.email}
-              onChange={this.handleChange}
+              value={email}
+              onChange={handleChange}
               required={true}
             />
             <Password
               placeholder='Password'
               name='pw'
               label='Create a password. (Minimum 8 characters)'
-              value={this.state.password}
-              onChange={this.handleChange}
+              value={password}
+              onChange={handleChange}
               required={true}
             />
             <Password
               placeholder='Confirm'
               name='pw2'
               label='Confirm your password.'
-              value={this.state.password2}
-              onChange={this.handleChange}
+              value={confirmation}
+              onChange={handleChange}
               required={true}
             />
-            {this.PasswordStrengthMeter()}
-            <Button type='submit' label='Create Account' disabled={!this.state.validForm} />
-            <p id='error-message'> {this.state.error} </p>
-          </form>
-        </div>
+            <PasswordStrengthMeter password={password} />
+          </div>
+          <p className={styles.errorMessage}>{errorMessage}</p>
+          <div className={styles.formPart}>
+            <Button type='submit' label='Register' disabled={!validForm} />
+            <p>
+              Already have an account? <Link to='/login'>Log in</Link>.
+            </p>
+          </div>
+        </form>
       </div>
-    )
-  }
+    </div>
+  )
 }
 
-export default Create
+export default Register
