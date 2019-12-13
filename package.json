@@ -1,0 +1,19 @@
+{
+  "name": "my-cuhacking",
+  "version": "1.0.0",
+  "description": "project: ??? | The application portal for cuHacking",
+  "main": "index.js",
+  "repository": "git@github.com:cuhacking/my-cuhacking.git",
+  "author": "walsker <walskerw@gmail.com>",
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "yarn --cwd ./client build",
+    "start": "node index.js",
+    "prod": "PROD=true node index.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "firebase-admin": "^8.8.0",
+    "winston": "^3.2.1"
+  }
+}
