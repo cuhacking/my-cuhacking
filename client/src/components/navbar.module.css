@@ -1,0 +1,39 @@
+#container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: auto;
+  width: 100%;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  z-index: 10;
+}
+
+#navbar {
+  display: flex;
+  justify-content: center;
+  width: 90%;
+  max-width: var(--contentWidth);
+}
+
+#navLogo {
+  width: 120px;
+  height: 100%;
+  background-image: url('../assets/shortLogo.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+@media only screen and (min-width: 700px) {
+  #navbar {
+    justify-content: flex-start;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  #navLogo {
+    background-image: url('../assets/shortLogo-dark.svg');
+  }
+}
