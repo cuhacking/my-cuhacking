@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { Input, Button, Navbar, Password } from 'components'
 import useAuth from 'hooks/useAuth'
 import styles from './index.module.css'
 
 function Login() {
   const auth = useAuth()
+  const history = useHistory()
   const [validForm, setValidity] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -22,9 +23,8 @@ function Login() {
 
     try {
       await auth.login(email, password)
-      if (auth.user) {
-        console.log('YAY')
-      }
+
+      history.push('/status')
     } catch (error) {
       switch (error.code) {
         case 'auth/user-disabled':

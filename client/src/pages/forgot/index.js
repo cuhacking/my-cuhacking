@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import { Link } from 'react-router-dom'
 import { Input, Button, Navbar } from 'components'
 import useAuth from 'hooks/useAuth'
@@ -40,6 +41,9 @@ const Forgot = () => {
 
   return (
     <div className={styles.forgotPage}>
+      <Helmet>
+        <title>Forgot Password</title>
+      </Helmet>
       <Navbar />
       <div className={styles.container}>
         <h1>Forgot Password</h1>
