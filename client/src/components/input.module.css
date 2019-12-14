@@ -76,7 +76,7 @@ option {
 
 .checkbox:checked {
   opacity: 1;
-  background-color: var(--secondaryColour);
+  background-color: var(--primaryColour);
 }
 
 .selectContainer {
@@ -88,4 +88,10 @@ option {
 .selectIcon {
   display: flex;
   position: absolute;
+}
+
+@media (prefers-color-scheme: dark) {
+  .checkbox:checked {
+    background-color: var(--secondaryColour);
+  }
 }

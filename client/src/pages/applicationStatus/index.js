@@ -15,8 +15,8 @@ const content = {
   unsubmitted: () => (
     <>
       <p>Your application is</p>
-      <h1>Unsubmitted</h1>
-      <p>Applications close December 27 at 11:59pm EST.</p>
+      <h1>Incomplete</h1>
+      <p>Don't worry, you'll still be considered with the first wave of applications.</p>
       <Button link to='/application/form' label='Continue' />
     </>
   ),

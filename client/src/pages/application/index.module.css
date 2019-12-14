@@ -11,7 +11,22 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
+  width: 100vw;
   justify-content: center;
+  align-items: center;
+  background-image: url('../../assets/bkg.svg');
+  background-position: center;
+  background-size: cover;
+  animation: fadein 2s;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .spinner {
@@ -19,6 +34,10 @@
 }
 
 @media (prefers-color-scheme: dark) {
+  .loadingScreen {
+    background-image: url('../../assets/bkg-dark.svg');
+  }
+
   .spinner {
     stroke: var(--secondaryColour);
   }

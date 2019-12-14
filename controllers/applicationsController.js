@@ -1,3 +1,5 @@
+const got = require('got')
+
 const { logger, stringify } = require('../helpers/logger')
 const Firestore = require('../model/firestore.js')
 const Authentication = require('../model/authentication')
@@ -28,13 +30,19 @@ ApplicationsController.getApplication = async (req, res, next) => {
   }
 }
 
-ApplicationsController.submitApplication = (req, res, next) => {
+ApplicationsController.submitApplication = async (req, res, next) => {
   try {
     logger.verbose('Submitting application...')
+    await Firestore.submitApplication(req.locals.uuid, JSON.parse(req.body.form))
 
-    Firestore.submitApplication(req.locals.uuid, JSON.parse(req.body.form))
+    logger.verbose('Application submitted! Sending email...')
+    await got(`https://cuhacking.com/mail/users/${req.body.email}`, {
+      method: 'POST',
+      json: {
+        tags: ['applied-2', '2020']
+      }
+    })
 
-    // TODO: hit mail service
     logger.verbose('Application submitted!')
     return res.sendStatus(200)
   } catch (error) {

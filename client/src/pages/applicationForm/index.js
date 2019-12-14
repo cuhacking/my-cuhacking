@@ -26,12 +26,7 @@ const tShirtSizes = ['Small', 'Medium', 'Large', 'Extra Large']
 const employmentTypes = ['Internship (Co-op)', 'Full time', 'Part time']
 
 const Link = ({ href, children }) => (
-  <a
-    style={{ color: 'var(--secondaryColour)', textDecoration: 'underline' }}
-    href={href}
-    target='_blank'
-    rel='noopener noreferrer external'
-  >
+  <a href={href} target='_blank' rel='noopener noreferrer external'>
     {children}
   </a>
 )
