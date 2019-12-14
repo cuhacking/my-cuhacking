@@ -19,7 +19,7 @@ const ethnicityOptions = [
 
 const degreeOptions = ['Bachelor', 'High School Diploma', 'College Diploma', 'Master', 'Doctorate']
 
-const graduationOptions = [2019, 2020, 2021, 2022, 2023, 2024, 2025]
+const graduationOptions = [2020, 2021, 2022, 2023, 2024, 2025]
 
 const tShirtSizes = ['Small', 'Medium', 'Large', 'Extra Large']
 
