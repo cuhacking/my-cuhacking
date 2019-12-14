@@ -34,29 +34,10 @@ Firestore.createApplication = async (uuid, email) => {
   return newUser
 }
 
-Firestore.updateApplication = (uuid, application) => {
+Firestore.submitApplication = (uuid, application) => {
   fb.collection('Users')
     .doc(uuid)
-    .update({
-      application
-    })
-}
-
-Firestore.startApplication = uuid => {
-  fb.collection('Users')
-    .doc(uuid)
-    .update({
-      appStatus: 'unsubmitted',
-      review: {
-        wave: 2
-      }
-    })
-}
-
-Firestore.submitApplication = uuid => {
-  fb.collection('Users')
-    .doc(uuid)
-    .update({ appStatus: 'submitted' })
+    .update({ appStatus: 'submitted', application })
 }
 
 Firestore.getApplicationWindow = async () => {

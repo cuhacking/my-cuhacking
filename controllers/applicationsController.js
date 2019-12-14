@@ -8,9 +8,11 @@ ApplicationsController.getApplication = async (req, res, next) => {
   try {
     logger.verbose('Getting application...')
 
+    let code = 200
     let user = await Firestore.getUser(req.locals.uuid)
 
     if (!user) {
+      code = 201
       logger.verbose('New applicant! Creating application...')
       const { email } = await Authentication.getUser(req.locals.uuid)
       user = await Firestore.createApplication(req.locals.uuid, email)
@@ -19,23 +21,24 @@ ApplicationsController.getApplication = async (req, res, next) => {
 
     logger.debug(stringify(user))
     logger.verbose('Application retrieved')
-    return res.status(200).send({ application: user.application, status: user.appStatus })
+    return res.status(code).send({ application: user.application, status: user.appStatus })
   } catch (error) {
     logger.error(`Error retrieving application: ${error}`)
     next(error)
   }
 }
 
-ApplicationsController.updateApplication = (req, res, next) => {
+ApplicationsController.submitApplication = (req, res, next) => {
   try {
-    logger.verbose('Updating application...')
+    logger.verbose('Submitting application...')
 
-    Firestore.updateApplication(req.locals.uuid, req.body.application)
+    Firestore.submitApplication(req.locals.uuid, JSON.parse(req.body.form))
 
-    logger.verbose('Application updated')
+    // TODO: hit mail service
+    logger.verbose('Application submitted!')
     return res.sendStatus(200)
   } catch (error) {
-    logger.error(`Error updating application: ${error}`)
+    logger.error(`Error submitting application: ${error}`)
     next(error)
   }
 }

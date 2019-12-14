@@ -11,18 +11,18 @@
     "basicInfo": {
       "firstName": null,
       "lastName": null,
-      "gender": null,
-      "ethnicity": null,
+      "gender": "Prefer not to answer",
+      "ethnicity": "Prefer not to answer",
       "emergencyPhone": null,
       "otherEthnicity": null,
       "otherGender": null
     },
     "personalInfo": {
-      "school": null,
+      "school": "Carleton University",
       "major": null,
       "minor": null,
-      "degree": null,
-      "expectedGraduation": null,
+      "degree": "Bachelor",
+      "expectedGraduation": 2019,
       "cityOfOrigin": null,
       "tShirtSize": null,
       "dietaryRestrictions": {
@@ -33,10 +33,10 @@
         "glutenFree": false,
         "other": null
       },
-      "wantsShuttle": null
+      "wantsShuttle": false
     },
     "skills": {
-      "numHackathons": null,
+      "numHackathons": 0,
       "selfTitle": null,
       "accomplishmentStatement": null,
       "challengeStatement": null
@@ -45,7 +45,7 @@
       "github": null,
       "linkedin": null,
       "website": null,
-      "soughtPosition": null,
+      "soughtPosition": "Internship (Co-op)",
       "resume": false
     },
     "terms": {

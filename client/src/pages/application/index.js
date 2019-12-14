@@ -6,69 +6,69 @@ import ApplicationForm from '../applicationForm'
 import ApplicationStatus from '../applicationStatus'
 import styles from './index.module.css'
 
-const fakeUser = {
-  email: 'walskerw@gmail.com',
-  role: 'user',
-  uid: null,
-  rsvp: {},
-  review: {
-    wave: 2
-  },
-  appStatus: 'unsubmitted',
-  application: {
-    basicInfo: {
-      firstName: null,
-      lastName: null,
-      gender: null,
-      ethnicity: null,
-      emergencyPhone: null,
-      otherEthnicity: null,
-      otherGender: null
-    },
-    personalInfo: {
-      school: null,
-      major: null,
-      minor: null,
-      degree: null,
-      expectedGraduation: null,
-      cityOfOrigin: null,
-      tShirtSize: null,
-      dietaryRestrictions: {
-        halal: false,
-        vegetarian: false,
-        lactoseFree: false,
-        nutFree: false,
-        glutenFree: false,
-        other: null
-      },
-      wantsShuttle: null
-    },
-    skills: {
-      numHackathons: null,
-      selfTitle: null,
-      accomplishmentStatement: null,
-      challengeStatement: null
-    },
-    profile: {
-      github: null,
-      linkedin: null,
-      website: null,
-      soughtPosition: null,
-      resume: false
-    },
-    terms: {
-      codeOfConduct: false,
-      privacyPolicy: false,
-      under18: false
-    }
-  }
-}
+// const fakeUser = {
+//   email: 'walskerw@gmail.com',
+//   role: 'user',
+//   uid: null,
+//   rsvp: {},
+//   review: {
+//     wave: 2
+//   },
+//   appStatus: 'unsubmitted',
+//   application: {
+//     basicInfo: {
+//       firstName: null,
+//       lastName: null,
+//       gender: null,
+//       ethnicity: null,
+//       emergencyPhone: null,
+//       otherEthnicity: null,
+//       otherGender: null
+//     },
+//     personalInfo: {
+//       school: null,
+//       major: null,
+//       minor: null,
+//       degree: null,
+//       expectedGraduation: null,
+//       cityOfOrigin: null,
+//       tShirtSize: null,
+//       dietaryRestrictions: {
+//         halal: false,
+//         vegetarian: false,
+//         lactoseFree: false,
+//         nutFree: false,
+//         glutenFree: false,
+//         other: null
+//       },
+//       wantsShuttle: null
+//     },
+//     skills: {
+//       numHackathons: null,
+//       selfTitle: null,
+//       accomplishmentStatement: null,
+//       challengeStatement: null
+//     },
+//     profile: {
+//       github: null,
+//       linkedin: null,
+//       website: null,
+//       soughtPosition: null,
+//       resume: false
+//     },
+//     terms: {
+//       codeOfConduct: false,
+//       privacyPolicy: false,
+//       under18: false
+//     }
+//   }
+// }
 
-const fakeFetch = () => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => resolve(fakeUser), 200)
-  })
-}
+// const fakeFetch = () => {
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => resolve(fakeUser), 200)
+//   })
+// }
 
 const Application = () => {
   const auth = useAuth()
@@ -80,9 +80,9 @@ const Application = () => {
   useEffect(() => {
     const getStatus = async () => {
       const idToken = await auth.getToken()
-      // const response = await fetch(`${window.location.origin}/api/applications/${idToken}`)
-      // const { application, status } = await response.json()
-      const { application, appStatus: status } = await fakeFetch()
+      const response = await fetch(`${window.location.origin}/api/applications/${idToken}`)
+      const { application, status } = await response.json()
+      // const { application, appStatus: status } = await fakeFetch()
       setStatus(status)
       setApplication(application)
       console.log('set!', status, application)
@@ -104,8 +104,13 @@ const Application = () => {
             <Route path={`${path}/status`} render={() => <ApplicationStatus appStatus={appStatus} />} />
             <Route
               path={`${path}/form`}
-              render={() => <ApplicationForm applicationForm={applicationForm} />}
-              setApplication={setApplication}
+              render={() =>
+                appStatus === 'unstarted' || appStatus === 'submitted' ? (
+                  <ApplicationForm applicationForm={applicationForm} setApplication={setApplication} />
+                ) : (
+                  <Redirect to={`${path}/status`} />
+                )
+              }
             />
             <Redirect to={`${path}/status`} />
           </Switch>

@@ -13,7 +13,7 @@ const env = process.env.PROD ? 'production' : 'development'
 const config = require('./config.json')[env]
 
 // Allow the server to parse JSON
-app.use(express.json())
+app.use(express.json({ limit: '5mb' }))
 
 // Log each request the server receives
 app.use('*', (req, res, next) => {

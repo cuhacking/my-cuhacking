@@ -1,69 +1,10 @@
-import React, { useEffect, useState } from 'react'
-import useAuth from 'hooks/useAuth'
-import { Helmet } from 'react-helmet'
+import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import { Navbar, Input, Button } from 'components'
+import useAuth from 'hooks/useAuth'
 import Dropbox from './dropbox'
 import { schools } from './schools'
 import styles from './index.module.css'
-import { useHistory } from 'react-router-dom'
-
-const fakeUser = {
-  email: null,
-  role: 'user',
-  uid: null,
-  rsvp: {},
-  review: {
-    wave: 2
-  },
-  appStatus: 'unstarted',
-  application: {
-    basicInfo: {
-      firstName: null,
-      lastName: null,
-      gender: null,
-      ethnicity: null,
-      emergencyPhone: null,
-      otherEthnicity: null,
-      otherGender: null
-    },
-    personalInfo: {
-      school: null,
-      major: null,
-      minor: null,
-      degree: null,
-      expectedGraduation: null,
-      cityOfOrigin: null,
-      tShirtSize: null,
-      dietaryRestrictions: {
-        halal: false,
-        vegetarian: false,
-        lactoseFree: false,
-        nutFree: false,
-        glutenFree: false,
-        other: null
-      },
-      wantsShuttle: null
-    },
-    skills: {
-      numHackathons: null,
-      selfTitle: null,
-      accomplishmentStatement: null,
-      challengeStatement: null
-    },
-    profile: {
-      github: null,
-      linkedin: null,
-      website: null,
-      soughtPosition: null,
-      resume: false
-    },
-    terms: {
-      codeOfConduct: false,
-      privacyPolicy: false,
-      under18: false
-    }
-  }
-}
 
 const genderOptions = ['Prefer not to answer', 'Female', 'Male', 'Other (please specify)']
 
@@ -96,82 +37,109 @@ const Link = ({ href, children }) => (
   </a>
 )
 
-// const Submitted = () => (
-//   <div className={styles.page} id={styles.start}>
-//     <h1 id={styles.superTitle}>Application</h1>
-//     <h2 id={styles.title}>Submitted</h2>
-//     <p>We have received your application! Keep an eye on your email for updates.</p>
-//   </div>
-// )
-
-const fakeFetch = () => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => resolve(fakeUser), 2000)
-  })
-}
-
 const Application = ({ applicationForm, setApplication }) => {
+  const auth = useAuth()
+  const history = useHistory()
   const { basicInfo, personalInfo, profile, skills, terms } = applicationForm
 
   const [resume, setResume] = useState()
 
-  // const submitApplication = formData => {
-  //   const finalForm = { ...applicationForm, ...formData, status: 'submitted' }
-  //   const payload = new FormData()
-
-  //   console.log(resume)
-  //   payload.append('form', JSON.stringify(finalForm))
-  //   payload.append('email', email)
-  //   if (resume) {
-  //     payload.append('resume', resume, resume.path)
-  //   }
-
-  //   const options = {
-  //     method: 'POST',
-  //     body: payload,
-  //     headers: {
-  //       'Access-Control-Request-Headers': 'POST',
-  //       Authorization: `Bearer ${token}`
-  //     }
-  //   }
-
-  //   console.log('next!', options)
-  //   fetch(`${API_URL}/users/application/submit`, options)
-  //     .then(res => {
-  //       console.log('Submit status:', res.status)
-
-  //       setApplication(finalForm)
-
-  //       // Move to the next page
-  //       changeStage(6)
-  //       changePage(6)
-  //     })
-  //     .catch(error => {
-  //       console.log(error)
-  //     })
-  // }
-
-  const submitApplication = event => {
+  const submitApplication = async event => {
     event.preventDefault()
+    console.log(applicationForm)
+    console.log(resume)
+
+    const payload = new FormData()
+    payload.append('form', JSON.stringify(applicationForm))
+    payload.append('email', auth.user.email)
+    if (resume) {
+      payload.append('resume', resume, resume.path)
+    }
+
+    try {
+      const idToken = await auth.getToken()
+      const response = await fetch(`${window.location.origin}/api/applications/${idToken}`, {
+        method: 'POST',
+        body: payload
+      })
+
+      if (response.status === 200) {
+        history.push('/applications')
+      } else if (response.status === 413) {
+        alert('Resume is too large. Maximum of 4mb.')
+      } else {
+        console.error(`Unexpected status code: ${response.status}`)
+      }
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   const onChange = event => {
-    const { name, value } = event.target
+    const { name, checked, type, value } = event.target
 
-    let a = {}
-    a[event.target.name] = event.target.value
-    console.log(a)
-
-    // if (target.name in personalInfo.dietaryRestrictions) {
-    //   personalInfo.dietaryRestrictions[target.name] = target.type === 'checkbox' ? target.checked : target.value
-    //   console.log(personalInfo.dietaryRestrictions)
-    // } else {
-    //   setInfo({
-    //     ...personalInfo,
-    //     [target.name]:
-    //       (target.type === 'checkbox' ? target.checked : target.value) || APPLICATION_SCHEMA.personalInfo[target.name]
-    //   })
-    // }
+    if (name in basicInfo) {
+      console.log('Category: basicInfo')
+      setApplication({
+        ...applicationForm,
+        basicInfo: {
+          ...basicInfo,
+          [name]: value.trim() || null
+        }
+      })
+    } else if (name in personalInfo) {
+      console.log('Category: personalInfo')
+      setApplication({
+        ...applicationForm,
+        personalInfo: {
+          ...personalInfo,
+          [name]: type === 'checkbox' ? checked : name === 'expectedGraduation' ? Number(value) : value.trim() || null
+        }
+      })
+    } else if (name in personalInfo.dietaryRestrictions) {
+      console.log('Category: personalInfo.dietaryRestrictions')
+      setApplication({
+        ...applicationForm,
+        personalInfo: {
+          ...personalInfo,
+          dietaryRestrictions: {
+            ...personalInfo.dietaryRestrictions,
+            [name]: type === 'checkbox' ? checked : value.trim() || null
+          }
+        }
+      })
+      console.log(name, type, checked, value)
+    } else if (name in skills) {
+      console.log('Category: skills')
+      setApplication({
+        ...applicationForm,
+        skills: {
+          ...skills,
+          [name]: name === 'numHackathons' ? Number(value) : value.trim() || null
+        }
+      })
+    } else if (name in profile) {
+      console.log('Category: profile')
+      console.log(name)
+      setApplication({
+        ...applicationForm,
+        profile: {
+          ...profile,
+          [name]: value.trim() || null
+        }
+      })
+    } else {
+      console.log('Category: terms')
+      console.log(name, checked)
+      setApplication({
+        ...applicationForm,
+        terms: {
+          ...terms,
+          [name]: checked
+        }
+      })
+    }
+    console.log(terms)
   }
 
   return (
@@ -249,7 +217,7 @@ const Application = ({ applicationForm, setApplication }) => {
               label='What school do you attend? *'
               required={true}
               inputStyle='select'
-              options={['', ...schools]}
+              options={schools}
             />
             <Input
               defaultValue={personalInfo.otherSchool}
@@ -326,7 +294,7 @@ const Application = ({ applicationForm, setApplication }) => {
               label='Lactose Free'
             />
             <Input
-              defaultChecked={personalInfo.dietaryRestrictions.treeNutFree}
+              defaultChecked={personalInfo.dietaryRestrictions.nutFree}
               inputStyle='checkbox'
               name='nutFree'
               label='Nut Free'
@@ -355,9 +323,12 @@ const Application = ({ applicationForm, setApplication }) => {
               required
             />
           </div>
-          <div className={styles.section} style={{ paddingTop: 30 }}>
-            We're looking at getting shuttles to transport hackers from other cities to cuHacking and back, however they
-            will be organized based on demand.
+          <div className={styles.section} style={{ paddingTop: 10, flexDirection: 'column' }}>
+            <p>
+              We're looking at getting shuttles to transport hackers from other cities to cuHacking and back, however
+              they will be organized based on demand.
+            </p>
+            <strong>A shuttle has already been confirmed for Toronto (Union station).</strong>
           </div>
           <div className={styles.checkBoxSection}>
             <Input
@@ -414,7 +385,32 @@ const Application = ({ applicationForm, setApplication }) => {
             />
           </div>
           <div className={styles.section}>
-            <Dropbox resume={resume} setResume={setResume} />
+            <Dropbox
+              resume={resume}
+              setResume={pdf => {
+                if (pdf) {
+                  setApplication({
+                    ...applicationForm,
+                    profile: {
+                      ...profile,
+                      resume: true
+                    }
+                  })
+
+                  setResume(pdf)
+                } else {
+                  setApplication({
+                    ...applicationForm,
+                    profile: {
+                      ...profile,
+                      resume: false
+                    }
+                  })
+
+                  setResume(undefined)
+                }
+              }}
+            />
           </div>
           <div className={styles.section}>
             <p>
@@ -471,7 +467,6 @@ const Application = ({ applicationForm, setApplication }) => {
             />
           </div>
           <div className={styles.buttons}>
-            <Button label='Save' type='button' />
             <Button label='Submit' type='submit' />
           </div>
         </form>
