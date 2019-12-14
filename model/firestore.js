@@ -8,6 +8,16 @@ Firestore.init = admin => {
   fb = admin.firestore()
 }
 
+// Async
+Firestore.getUser = async uuid => {
+  const doc = await fb
+    .collection('Users')
+    .doc(uuid)
+    .get()
+
+  return doc.data()
+}
+
 Firestore.updateApplication = (uuid, application) => {
   fb.collection('Users')
     .doc(uuid)

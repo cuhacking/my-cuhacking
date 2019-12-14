@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { Link, useHistory } from 'react-router-dom'
+import Loader from 'react-loader-spinner'
 import { Input, Button, Navbar, Password } from 'components'
 import useAuth from 'hooks/useAuth'
 import styles from './index.module.css'
@@ -69,14 +70,34 @@ const content = {
 }
 
 const Status = () => {
-  const [appStatus, setStatus] = useState('rejected')
+  const auth = useAuth()
+  const [appStatus, setStatus] = useState(null)
+
+  useEffect(() => {
+    const getStatus = async () => {
+      const idToken = await auth.getToken()
+      const response = await fetch(`${window.location.origin}/api/applications/${idToken}`)
+      const { application, status } = await response.json()
+      console.log('AH', status, application)
+      setStatus(status)
+    }
+    getStatus()
+  }, [])
+
   return (
     <div className={styles.statusPage}>
       <Helmet>
         <title>Application Status | My cuHacking</title>
       </Helmet>
       <Navbar />
-      <div className={styles.container}>{!appStatus ? <p>Loading ...</p> : content[appStatus]()}</div>
+      <div className={styles.container}>
+        {!appStatus ? (
+          // <Loader type='Triangle' color='#7c39bf' height={100} width={100} timeout={10000} />
+          <p>Loading...</p>
+        ) : (
+          content[appStatus]()
+        )}
+      </div>
     </div>
   )
 }

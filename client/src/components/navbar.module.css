@@ -12,9 +12,19 @@
 
 #navbar {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
   width: 90%;
   max-width: var(--contentWidth);
+}
+
+.logoLink {
+  display: flex;
+  height: 100%;
+}
+
+.logoutButton {
+  display: flex;
 }
 
 #navLogo {
@@ -27,9 +37,9 @@
 }
 
 @media only screen and (min-width: 700px) {
-  #navbar {
+  /* #navbar {
     justify-content: flex-start;
-  }
+  } */
 }
 
 @media (prefers-color-scheme: dark) {

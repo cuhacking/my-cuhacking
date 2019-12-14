@@ -24,7 +24,7 @@ const App = () => {
         <Route path='/login' component={Login} />
         <Route path='/register' component={Register} />
         <Route path='/forgot' component={Forgot} />
-        <Route path='/status' component={Status} />
+        <ProtectedRoute path='/status' component={Status} />
         {/* <Route path='/application' component={Application} /> */}
         <Route exact path='/' render={() => (auth.user ? <Redirect to='/status' /> : <Redirect to='/login' />)} />
         <Route component={NotFound} />

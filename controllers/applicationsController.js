@@ -1,7 +1,22 @@
-const { logger } = require('../helpers/logger')
+const { logger, stringify } = require('../helpers/logger')
 const Firestore = require('../model/firestore.js')
 
 const ApplicationsController = module.exports
+
+ApplicationsController.getApplication = async (req, res, next) => {
+  try {
+    logger.verbose('Getting application...')
+
+    const user = await Firestore.getUser(req.locals.uuid)
+
+    logger.debug(stringify(user))
+    logger.verbose('Application retrieved')
+    return res.status(200).send({ application: user.application, status: user.appStatus })
+  } catch (error) {
+    logger.error(`Error retrieving application: ${error}`)
+    next(error)
+  }
+}
 
 ApplicationsController.updateApplication = (req, res, next) => {
   try {

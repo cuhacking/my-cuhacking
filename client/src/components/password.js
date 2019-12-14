@@ -40,11 +40,7 @@ class Password extends React.Component {
             placeholder={this.props.placeholder}
             required={true}
           />
-          <div
-            className={styles.visibilityToggle}
-            onMouseDown={this.toggleVisibility}
-            onMouseUp={this.toggleVisibility}
-          >
+          <div className={styles.visibilityToggle} onClick={this.toggleVisibility}>
             {' '}
             {this.eyeIcon()}{' '}
           </div>

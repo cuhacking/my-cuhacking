@@ -14,10 +14,13 @@ export default () => {
 
   const resetPassword = email => firebase.auth().sendPasswordResetEmail(email)
 
+  const getToken = () => firebase.auth().currentUser.getIdToken(/* forceRefresh */ true)
+
   return {
     user,
     loading,
     error,
+    getToken,
     login,
     logout,
     resetPassword,

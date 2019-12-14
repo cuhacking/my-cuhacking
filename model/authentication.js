@@ -11,6 +11,7 @@ Authentication.init = admin => {
 Authentication.verifyToken = async idToken => {
   try {
     const { uid } = await auth.verifyIdToken(idToken)
+    logger.debug(`uid: ${uid}`)
     return uid
   } catch (error) {
     logger.error(`Token verificaiton failed: ${error}`)
