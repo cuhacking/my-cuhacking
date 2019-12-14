@@ -24,7 +24,7 @@ function Login() {
     try {
       await auth.login(email, password)
 
-      history.push('/status')
+      history.push('/application/status')
     } catch (error) {
       switch (error.code) {
         case 'auth/user-disabled':

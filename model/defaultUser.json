@@ -1,0 +1,57 @@
+{
+  "email": null,
+  "role": "user",
+  "uid": null,
+  "rsvp": {},
+  "review": {
+    "wave": 2
+  },
+  "appStatus": "unstarted",
+  "application": {
+    "basicInfo": {
+      "firstName": null,
+      "lastName": null,
+      "gender": null,
+      "ethnicity": null,
+      "emergencyPhone": null,
+      "otherEthnicity": null,
+      "otherGender": null
+    },
+    "personalInfo": {
+      "school": null,
+      "major": null,
+      "minor": null,
+      "degree": null,
+      "expectedGraduation": null,
+      "cityOfOrigin": null,
+      "tShirtSize": null,
+      "dietaryRestrictions": {
+        "halal": false,
+        "vegetarian": false,
+        "lactoseFree": false,
+        "nutFree": false,
+        "glutenFree": false,
+        "other": null
+      },
+      "wantsShuttle": null
+    },
+    "skills": {
+      "numHackathons": null,
+      "selfTitle": null,
+      "accomplishmentStatement": null,
+      "challengeStatement": null
+    },
+    "profile": {
+      "github": null,
+      "linkedin": null,
+      "website": null,
+      "soughtPosition": null,
+      "resume": false
+    },
+    "terms": {
+      "codeOfConduct": false,
+      "privacyPolicy": false,
+      "under18": false
+    }
+  }
+}

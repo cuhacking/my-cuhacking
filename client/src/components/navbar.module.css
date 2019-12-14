@@ -25,6 +25,7 @@
 
 .logoutButton {
   display: flex;
+  color: var(--primaryColour);
 }
 
 #navLogo {
@@ -40,10 +41,19 @@
   /* #navbar {
     justify-content: flex-start;
   } */
+
+  .logoutButton:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
   #navLogo {
     background-image: url('../assets/shortLogo-dark.svg');
+  }
+
+  .logoutButton {
+    color: var(--secondaryColour);
   }
 }

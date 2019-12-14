@@ -3,16 +3,35 @@ import ReactDOM from 'react-dom'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 import * as firebase from 'firebase/app'
 import firebaseConfig from './firebase-config.json'
-import { Forgot, Login, NotFound, Register, Status } from 'pages'
+import { Application, Forgot, Login, NotFound, Register, Status } from 'pages'
 import useAuth from 'hooks/useAuth'
 import './index.css'
 
 firebase.initializeApp(firebaseConfig)
 
-const ProtectedRoute = ({ component: Component, ...props }) => {
+const AuthRoute = ({ component: Component, ...props }) => {
   const auth = useAuth()
 
-  return <Route {...props} render={props => (auth.user ? <Component {...props} /> : <Redirect to='/login' />)} />
+  if (auth.loading) {
+    return <div />
+  } else {
+    return <Route {...props} render={props => (auth.user ? <Component {...props} /> : <Redirect to='/login' />)} />
+  }
+}
+
+const UnAuthRoute = ({ component: Component, ...props }) => {
+  const auth = useAuth()
+
+  if (auth.loading) {
+    return <div />
+  } else {
+    return (
+      <Route
+        {...props}
+        render={props => (auth.user ? <Redirect to='/application/status' /> : <Component {...props} />)}
+      />
+    )
+  }
 }
 
 const App = () => {
@@ -21,11 +40,10 @@ const App = () => {
   return (
     <Router>
       <Switch>
-        <Route path='/login' component={Login} />
-        <Route path='/register' component={Register} />
-        <Route path='/forgot' component={Forgot} />
-        <ProtectedRoute path='/status' component={Status} />
-        {/* <Route path='/application' component={Application} /> */}
+        <UnAuthRoute path='/login' component={Login} />
+        <UnAuthRoute path='/register' component={Register} />
+        <UnAuthRoute path='/forgot' component={Forgot} />
+        <AuthRoute path='/application' component={Application} />
         <Route exact path='/' render={() => (auth.user ? <Redirect to='/status' /> : <Redirect to='/login' />)} />
         <Route component={NotFound} />
       </Switch>

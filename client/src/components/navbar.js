@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import useAuth from 'hooks/useAuth'
 import styles from './navbar.module.css'
 
@@ -17,9 +16,9 @@ export default () => {
           <div id={styles.navLogo} />
         </a>
         {auth.user ? (
-          <Link to='/' className={styles.logoutButton} onClick={logout}>
+          <div className={styles.logoutButton} onClick={logout}>
             <h4>Logout</h4>
-          </Link>
+          </div>
         ) : (
           <div />
         )}

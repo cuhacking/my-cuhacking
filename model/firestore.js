@@ -1,4 +1,5 @@
 const { logger } = require('../helpers/logger')
+const defaultUser = require('./defaultUser.json')
 
 const Firestore = module.exports
 
@@ -16,6 +17,21 @@ Firestore.getUser = async uuid => {
     .get()
 
   return doc.data()
+}
+
+Firestore.createApplication = async (uuid, email) => {
+  const newUser = {
+    ...defaultUser,
+    uid: uuid,
+    email
+  }
+
+  await fb
+    .collection('Users')
+    .doc(uuid)
+    .set(newUser)
+
+  return newUser
 }
 
 Firestore.updateApplication = (uuid, application) => {

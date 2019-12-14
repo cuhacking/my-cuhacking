@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import { Helmet } from 'react-helmet'
-import { Link, useHistory } from 'react-router-dom'
-import Loader from 'react-loader-spinner'
-import { Input, Button, Navbar, Password } from 'components'
-import useAuth from 'hooks/useAuth'
+import React from 'react'
+import { Link } from 'react-router-dom'
+import { Button, Navbar } from 'components'
 import styles from './index.module.css'
 
 const content = {
@@ -12,7 +9,7 @@ const content = {
       <p>Your application is</p>
       <h1>Unstarted</h1>
       <p>Apply now! Applications close December 27 at 11:59pm EST.</p>
-      <Button link to='/application' label='Apply' />
+      <Button link to='/application/form' label='Apply' />
     </>
   ),
   unsubmitted: () => (
@@ -20,7 +17,7 @@ const content = {
       <p>Your application is</p>
       <h1>Unsubmitted</h1>
       <p>Applications close December 27 at 11:59pm EST.</p>
-      <Button link to='/application' label='Continue' />
+      <Button link to='/application/form' label='Continue' />
     </>
   ),
   submitted: () => (
@@ -28,7 +25,7 @@ const content = {
       <p>Your application has been</p>
       <h1>Submitted</h1>
       <p>Made a mistake? Edit your application below.</p>
-      <Button link to='/application' label='Edit Application' />
+      <Button link to='/application/form' label='Edit Application' />
     </>
   ),
   inReview: () => (
@@ -43,9 +40,9 @@ const content = {
       <p>Your application has been</p>
       <h1>Accepted!</h1>
       <p>If you’re sure you can come, fill out the form below! If not, please let us know.</p>
-      <Button link to='/application' label='RSVP' />
+      <Button link to='/rsvp' label='RSVP' />
       <p>
-        <Link to='/register'>I can't make it :(</Link>
+        <Link to='/'>I can't make it :(</Link>
       </p>
     </>
   ),
@@ -55,7 +52,12 @@ const content = {
       <h1>Waitlist</h1>
       <p>We were not able to extend an invitation right away, but stick around and a spot may open up.</p>
       <p>Don't want to wait? Volunteer instead!</p>
-      <Button link to='/application' label='Volunteer' />
+      <Button
+        external
+        link
+        to='https://docs.google.com/forms/d/e/1FAIpQLSeQjgCEb6PNZBK1PEm3rFA9EHkO7LmyxSSBNGLu16XzIY_B7Q/viewform'
+        label='Volunteer'
+      />
     </>
   ),
   rejected: () => (
@@ -69,37 +71,11 @@ const content = {
   )
 }
 
-const Status = () => {
-  const auth = useAuth()
-  const [appStatus, setStatus] = useState(null)
-
-  useEffect(() => {
-    const getStatus = async () => {
-      const idToken = await auth.getToken()
-      const response = await fetch(`${window.location.origin}/api/applications/${idToken}`)
-      const { application, status } = await response.json()
-      console.log('AH', status, application)
-      setStatus(status)
-    }
-    getStatus()
-  }, [])
-
-  return (
-    <div className={styles.statusPage}>
-      <Helmet>
-        <title>Application Status | My cuHacking</title>
-      </Helmet>
-      <Navbar />
-      <div className={styles.container}>
-        {!appStatus ? (
-          // <Loader type='Triangle' color='#7c39bf' height={100} width={100} timeout={10000} />
-          <p>Loading...</p>
-        ) : (
-          content[appStatus]()
-        )}
-      </div>
-    </div>
-  )
-}
+const Status = ({ appStatus }) => (
+  <div className={styles.statusPage}>
+    <Navbar />
+    <div className={styles.container}>{content[appStatus]()}</div>
+  </div>
+)
 
 export default Status

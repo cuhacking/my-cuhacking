@@ -30,6 +30,7 @@ class Password extends React.Component {
   render() {
     return (
       <div className={styles.inputContainer}>
+        <p className={styles.label}>{this.props.label}</p>
         <div className={styles.passwordField}>
           <input
             name={this.props.name}
@@ -45,7 +46,6 @@ class Password extends React.Component {
             {this.eyeIcon()}{' '}
           </div>
         </div>
-        <p className={styles.label}>{this.props.label}</p>
       </div>
     )
   }

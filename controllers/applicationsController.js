@@ -1,5 +1,6 @@
 const { logger, stringify } = require('../helpers/logger')
 const Firestore = require('../model/firestore.js')
+const Authentication = require('../model/authentication')
 
 const ApplicationsController = module.exports
 
@@ -7,7 +8,14 @@ ApplicationsController.getApplication = async (req, res, next) => {
   try {
     logger.verbose('Getting application...')
 
-    const user = await Firestore.getUser(req.locals.uuid)
+    let user = await Firestore.getUser(req.locals.uuid)
+
+    if (!user) {
+      logger.verbose('New applicant! Creating application...')
+      const { email } = await Authentication.getUser(req.locals.uuid)
+      user = await Firestore.createApplication(req.locals.uuid, email)
+      logger.verbose('Application created!')
+    }
 
     logger.debug(stringify(user))
     logger.verbose('Application retrieved')

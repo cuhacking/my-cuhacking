@@ -18,10 +18,6 @@ a {
   color: var(--lightPrimaryColour);
 }
 
-a:hover {
-  text-decoration: underline;
-}
-
 html,
 body {
   overflow-x: hidden;
