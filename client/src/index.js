@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 import * as firebase from 'firebase/app'
 import firebaseConfig from './firebase-config.json'
+// TODO: Make it easy to switch back and forth between dev mode and prod
 import { Application, Forgot, Login, NotFound, Register } from 'pages'
 import useAuth from 'hooks/useAuth'
 import './index.css'

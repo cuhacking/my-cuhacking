@@ -67,7 +67,7 @@ import styles from './index.module.css'
 
 // const fakeFetch = () => {
 //   return new Promise((resolve, reject) => {
-//     setTimeout(() => resolve(fakeUser), 200000)
+//     setTimeout(() => resolve(fakeUser), 5000)
 //   })
 // }
 
