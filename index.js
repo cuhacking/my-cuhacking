@@ -3,6 +3,7 @@ const path = require('path')
 const app = express()
 
 const admin = require('firebase-admin')
+const serviceAccount = require('./firebase-admin.json')
 const { init: initFirestore } = require('./model/firestore')
 const { init: initAuth } = require('./model/authentication')
 
@@ -29,7 +30,7 @@ app.use((error, req, res, next) => {
 
 // Initialize Firebase admin SDK
 admin.initializeApp({
-  credential: admin.credential.applicationDefault(),
+  credential: admin.credential.cert(serviceAccount),
   databaseURL: config.firebaseUrl,
   databaseAuthVariableOverride: 'my-cuhacking'
 })

@@ -9,7 +9,8 @@
   "scripts": {
     "build": "yarn --cwd ./client build",
     "start": "node index.js",
-    "prod": "PROD=true node index.js"
+    "prod": "PROD=true node index.js",
+    "deploy": "./deploy.sh"
   },
   "dependencies": {
     "express": "^4.17.1",
