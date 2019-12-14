@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { BrowserRouter as Router, Route, Switch, Redirect, useRouteMatch } from 'react-router-dom'
 import useAuth from 'hooks/useAuth'
+import { ReactComponent as Spinner } from 'assets/spinner.svg'
 import ApplicationForm from '../applicationForm'
 import ApplicationStatus from '../applicationStatus'
 import styles from './index.module.css'
@@ -66,7 +67,7 @@ import styles from './index.module.css'
 
 // const fakeFetch = () => {
 //   return new Promise((resolve, reject) => {
-//     setTimeout(() => resolve(fakeUser), 200)
+//     setTimeout(() => resolve(fakeUser), 200000)
 //   })
 // }
 
@@ -97,7 +98,9 @@ const Application = () => {
         <title>Application | My cuHacking</title>
       </Helmet>
       {loading ? (
-        <p>Loading...</p>
+        <div className={styles.loadingScreen}>
+          <Spinner className={styles.spinner} />
+        </div>
       ) : (
         <Router>
           <Switch>

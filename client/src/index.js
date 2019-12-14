@@ -44,7 +44,7 @@ const App = () => {
         <UnAuthRoute path='/register' component={Register} />
         <UnAuthRoute path='/forgot' component={Forgot} />
         <AuthRoute path='/application' component={Application} />
-        <Route exact path='/' render={() => (auth.user ? <Redirect to='/status' /> : <Redirect to='/login' />)} />
+        <Route exact path='/' render={() => (auth.user ? <Redirect to='/application' /> : <Redirect to='/login' />)} />
         <Route component={NotFound} />
       </Switch>
     </Router>

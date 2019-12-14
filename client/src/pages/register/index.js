@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
-import { Link, useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import zxcvbn from 'zxcvbn'
 import { Input, Button, Navbar, Password } from 'components'
 import useAuth from 'hooks/useAuth'
@@ -38,7 +38,6 @@ const PasswordStrengthMeter = ({ password }) => {
 
 const Register = () => {
   const auth = useAuth()
-  const history = useHistory()
   const [validForm, setValidity] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')

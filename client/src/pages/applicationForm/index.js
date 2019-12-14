@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
 import { Navbar, Input, Button } from 'components'
 import useAuth from 'hooks/useAuth'
 import Dropbox from './dropbox'
@@ -39,15 +38,12 @@ const Link = ({ href, children }) => (
 
 const Application = ({ applicationForm, setApplication }) => {
   const auth = useAuth()
-  const history = useHistory()
   const { basicInfo, personalInfo, profile, skills, terms } = applicationForm
 
   const [resume, setResume] = useState()
 
   const submitApplication = async event => {
     event.preventDefault()
-    console.log(applicationForm)
-    console.log(resume)
 
     const payload = new FormData()
     payload.append('form', JSON.stringify(applicationForm))
@@ -64,7 +60,7 @@ const Application = ({ applicationForm, setApplication }) => {
       })
 
       if (response.status === 200) {
-        history.push('/applications')
+        window.location.href = `${window.location.origin}/application`
       } else if (response.status === 413) {
         alert('Resume is too large. Maximum of 4mb.')
       } else {
@@ -79,7 +75,6 @@ const Application = ({ applicationForm, setApplication }) => {
     const { name, checked, type, value } = event.target
 
     if (name in basicInfo) {
-      console.log('Category: basicInfo')
       setApplication({
         ...applicationForm,
         basicInfo: {
@@ -88,7 +83,6 @@ const Application = ({ applicationForm, setApplication }) => {
         }
       })
     } else if (name in personalInfo) {
-      console.log('Category: personalInfo')
       setApplication({
         ...applicationForm,
         personalInfo: {
@@ -97,7 +91,6 @@ const Application = ({ applicationForm, setApplication }) => {
         }
       })
     } else if (name in personalInfo.dietaryRestrictions) {
-      console.log('Category: personalInfo.dietaryRestrictions')
       setApplication({
         ...applicationForm,
         personalInfo: {
@@ -108,9 +101,7 @@ const Application = ({ applicationForm, setApplication }) => {
           }
         }
       })
-      console.log(name, type, checked, value)
     } else if (name in skills) {
-      console.log('Category: skills')
       setApplication({
         ...applicationForm,
         skills: {
@@ -119,8 +110,6 @@ const Application = ({ applicationForm, setApplication }) => {
         }
       })
     } else if (name in profile) {
-      console.log('Category: profile')
-      console.log(name)
       setApplication({
         ...applicationForm,
         profile: {
@@ -129,8 +118,6 @@ const Application = ({ applicationForm, setApplication }) => {
         }
       })
     } else {
-      console.log('Category: terms')
-      console.log(name, checked)
       setApplication({
         ...applicationForm,
         terms: {
@@ -139,7 +126,6 @@ const Application = ({ applicationForm, setApplication }) => {
         }
       })
     }
-    console.log(terms)
   }
 
   return (
