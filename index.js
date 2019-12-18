@@ -15,6 +15,7 @@ const config = require('./config.json')[env]
 
 // Allow the server to parse JSON
 app.use(express.json({ limit: '5mb' }))
+app.use('/resources', express.static('./resources'))
 
 // Log each request the server receives
 app.use('*', (req, res, next) => {

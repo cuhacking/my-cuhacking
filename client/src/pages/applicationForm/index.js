@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
-import { Navbar, Input, Button } from 'components'
+import { Navbar, Dropbox, Input, Button } from 'components'
 import useAuth from 'hooks/useAuth'
-import Dropbox from './dropbox'
 import { schools } from './schools'
 import styles from './index.module.css'
 
@@ -367,8 +366,9 @@ const Application = ({ applicationForm, setApplication }) => {
           </div>
           <div className={styles.section}>
             <Dropbox
-              resume={resume}
-              setResume={pdf => {
+              file={resume}
+              name='resume'
+              storeFile={pdf => {
                 if (pdf) {
                   setApplication({
                     ...applicationForm,
@@ -391,7 +391,9 @@ const Application = ({ applicationForm, setApplication }) => {
                   setResume(undefined)
                 }
               }}
-            />
+            >
+              <p>Drop your resume here, or click to select it. (PDF only)</p>
+            </Dropbox>
           </div>
           <div className={styles.section}>
             <p>

@@ -1,14 +1,14 @@
-.statusPage {
-  height: 100vh;
+.formPage {
+  min-height: 100vh;
   width: 100vw;
   padding: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   background-image: url('../../assets/bkg.svg');
-  background-position: center;
+  background-position: bottom;
   background-size: cover;
 }
 
@@ -18,21 +18,31 @@
   align-items: center;
   animation: fadein 1s;
   text-align: center;
+  width: 90%;
   max-width: var(--contentWidth);
+  margin-top: 50px;
 }
 
 .container > h1 {
-  font-size: 75px;
+  font-size: 60px;
   font-weight: lighter;
-  margin-top: 0;
+  margin: 0 0;
 }
 
-.declineButton {
-  cursor: pointer;
-  text-decoration: none;
-  font-size: inherit;
-  font-family: inherit;
-  color: var(--lightPrimaryColour);
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+}
+
+.buttons {
+  margin: 10px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.appealText {
+  font-style: italic;
 }
 
 @keyframes fadein {
@@ -45,17 +55,24 @@
 }
 
 @media only screen and (min-width: 700px) {
-  .declineButton:hover {
+  .container {
+    width: 100%;
+  }
+  .appealButton:hover {
     text-decoration: underline;
+  }
+
+  .formContainer {
+    max-width: 800px;
   }
 }
 
 @media (prefers-color-scheme: dark) {
-  .statusPage {
+  .formPage {
     background-image: url('../../assets/bkg-dark.svg');
   }
 
-  .declineButton {
+  .appealButton {
     color: var(--secondaryColour);
   }
 }
