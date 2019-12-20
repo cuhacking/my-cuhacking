@@ -12,14 +12,15 @@ const Consent = ({ setStatus }) => {
     event.preventDefault()
 
     if (!consentForm) {
+      alert('You must upload your consent form.')
+    } else {
       const payload = new FormData()
       payload.append('email', auth.user.email)
       payload.append('consentForm', consentForm, consentForm.path)
 
       try {
         const idToken = await auth.getToken()
-        const response = await fetch(`${window.location.origin}/api/applications/${idToken}`, {
-          // TODO: do backend
+        const response = await fetch(`${window.location.origin}/api/applications/${idToken}/consentForm`, {
           method: 'POST',
           body: payload
         })

@@ -3,7 +3,7 @@ const router = express.Router()
 
 const multer = require('multer')
 
-var storage = multer.diskStorage({
+const resumeStorage = multer.diskStorage({
   destination: function(req, file, cb) {
     cb(null, 'resumes/')
   },
@@ -12,12 +12,28 @@ var storage = multer.diskStorage({
   }
 })
 
-const upload = multer({ storage })
+const consentFormStorage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, 'consentForms/')
+  },
+  filename: function(req, file, cb) {
+    cb(null, req.body.email + '.pdf')
+  }
+})
+
+const uploadResume = multer({ resumeStorage })
+const uploadConsentForm = multer({ consentFormStorage })
 
 const ApplicationsController = require('../controllers/applicationsController.js')
 const AuthController = require('../controllers/authController.js')
 
 router.get('/:token', AuthController.verify, ApplicationsController.getApplication)
-router.post('/:token', AuthController.verify, upload.single('resume'), ApplicationsController.submitApplication)
-
+router.post('/:token', AuthController.verify, uploadResume.single('resume'), ApplicationsController.submitApplication)
+router.post('/:token/status', AuthController.verify, ApplicationsController.setStatus)
+router.post(
+  '/:token/consentForm',
+  AuthController.verify,
+  uploadConsentForm.single('consentForm'),
+  ApplicationsController.submitConsentForm
+)
 module.exports = router

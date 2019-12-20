@@ -1,13 +1,63 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Button, Navbar } from 'components'
+import useAuth from 'hooks/useAuth'
 import styles from './index.module.css'
 
-const rsvp = () => {}
-
-const declineInivitation = () => {}
-
 const Content = ({ appStatus, isMinor }) => {
+  const auth = useAuth()
+
+  const rsvp = async event => {
+    event.preventDefault()
+
+    try {
+      const idToken = await auth.getToken()
+      const response = await fetch(`${window.location.origin}/api/applications/${idToken}/status`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          status: 'attending'
+        })
+      })
+
+      if (response.status === 200) {
+        window.location.href = `${window.location.origin}/application`
+      } else {
+        console.error(`Unexpected status code: ${response.status}`)
+        console.error(response)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const declineInivitation = async event => {
+    event.preventDefault()
+
+    try {
+      const idToken = await auth.getToken()
+      const response = await fetch(`${window.location.origin}/api/applications/${idToken}/status`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          status: 'withdrawn'
+        })
+      })
+
+      if (response.status === 200) {
+        window.location.href = `${window.location.origin}/application`
+      } else {
+        console.error(`Unexpected status code: ${response.status}`)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   switch (appStatus) {
     case 'unstarted':
       return (
@@ -129,6 +179,7 @@ const Content = ({ appStatus, isMinor }) => {
         </>
       )
     default:
+      console.error('Invalid App Status: ', appStatus)
       return (
         <>
           <p>An error as occured with your account. Please contact development@cuhacking.com.</p>
