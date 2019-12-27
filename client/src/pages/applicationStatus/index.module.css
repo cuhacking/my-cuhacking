@@ -35,6 +35,11 @@
   color: var(--lightPrimaryColour);
 }
 
+.disclaimer {
+  font-style: italic;
+  font-size: 14px;
+}
+
 @keyframes fadein {
   from {
     opacity: 0;

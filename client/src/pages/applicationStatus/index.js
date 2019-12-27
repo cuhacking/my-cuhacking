@@ -113,6 +113,11 @@ const Content = ({ appStatus, isMinor }) => {
             <p>Your application has been</p>
             <h1>Accepted!</h1>
             <p>Press the button below to save your spot!</p>
+            <p className={styles.disclaimer}>
+              By attending cuHacking, you agree to be photographed, videotaped, and/or interviewed for cuHacking
+              promotional material. You also are giving cuHacking the right to use and distribute any and all media from
+              the event with you in it.
+            </p>
             <Button onClick={rsvp} label='RSVP' />
             <p className={styles.declineButton} onClick={declineInivitation}>
               I can't make it :(
