@@ -112,11 +112,7 @@ const Content = ({ appStatus, isMinor }) => {
           <>
             <p>Your application has been</p>
             <h1>Accepted!</h1>
-            <p>
-              By attending cuHacking, you agree to be photographed, videotaped, and/or interviewed for cuHacking
-              promotional material. You also are giving cuHacking the right to use and distribute any and all media with
-              you in it.
-            </p>
+            <p>Press the button below to save your spot!</p>
             <Button onClick={rsvp} label='RSVP' />
             <p className={styles.declineButton} onClick={declineInivitation}>
               I can't make it :(
@@ -129,8 +125,14 @@ const Content = ({ appStatus, isMinor }) => {
         <>
           <p>Save the date!</p>
           <h1>January 11-12</h1>
-          <p>Registration begins January 11 at 9am at Richcraft Hall.</p>
-          <p>More event details are to come through social media and your email, so keep an eye out!</p>
+          <p>
+            Registration begins January 11 at 9am at{' '}
+            <a href='https://carleton.ca/campus/map/#RB' target='_blank' rel='noopener noreferrer external'>
+              Richcraft Hall
+            </a>
+            .
+          </p>
+          <p>Keep an eye on your email and social media for any updates!</p>
           <p className={styles.declineButton} onClick={declineInivitation}>
             I can't make it anymore :(
           </p>
@@ -156,7 +158,7 @@ const Content = ({ appStatus, isMinor }) => {
         <>
           <p>Unfortunately, we are not moving forward with your application this year.</p>
           <p>
-            We encourage you to keep an eye on our website and social media,as there will be many other events to
+            We encourage you to keep an eye on our website and social media, as there will be many other events to
             participate in during the year!
           </p>
         </>
@@ -166,7 +168,7 @@ const Content = ({ appStatus, isMinor }) => {
         <>
           <p>We’re sad to see you couldn’t make it.</p>
           <p>
-            We encourage you to keep an eye on our website and social media,as there will be many other events to
+            We encourage you to keep an eye on our website and social media, as there will be many other events to
             participate in during the year!
           </p>
           <p>If you change your mind, we can’t offer you another spot, but we ask you to volunteer instead!</p>

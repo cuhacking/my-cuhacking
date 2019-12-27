@@ -76,8 +76,7 @@ const Consent = ({ setStatus }) => {
           <a href='mailto:development@cuhacking.com?cc=operations@cuhacking.com&subject=Age of Majority Appeal'>
             development@cuhacking.com
           </a>{' '}
-          with the subject “Age of Majority Appeal”. Include a valid piece of ID that matches your application and
-          indicates that you are indeed 18 years old or over.
+          with the subject “Age of Majority Appeal” and we'll be able to help.
         </p>
       </div>
     </div>

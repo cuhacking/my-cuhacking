@@ -45,7 +45,7 @@ ApplicationsController.submitApplication = async (req, res, next) => {
       }
     })
 
-    logger.verbose('Application submitted!')
+    logger.verbose('Email sent!')
     return res.sendStatus(200)
   } catch (error) {
     logger.error(`Error submitting application: ${error}`)
