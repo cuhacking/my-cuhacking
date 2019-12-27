@@ -21,8 +21,8 @@ const consentFormStorage = multer.diskStorage({
   }
 })
 
-const uploadResume = multer({ resumeStorage })
-const uploadConsentForm = multer({ consentFormStorage })
+const uploadResume = multer({ storage: resumeStorage })
+const uploadConsentForm = multer({ storage: consentFormStorage })
 
 const ApplicationsController = require('../controllers/applicationsController.js')
 const AuthController = require('../controllers/authController.js')
