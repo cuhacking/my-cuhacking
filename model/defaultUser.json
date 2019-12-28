@@ -19,6 +19,7 @@
     },
     "personalInfo": {
       "school": "Carleton University",
+      "otherSchool": null,
       "major": null,
       "minor": null,
       "degree": "Bachelor",
