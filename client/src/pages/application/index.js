@@ -114,7 +114,7 @@ const Application = () => {
             <Route
               path={`${path}/form`}
               render={() =>
-                appStatus === 'unstarted' || appStatus === 'submitted' || appStatus === 'unsubmitted' ? (
+                appStatus === 'submitted' || appStatus === 'unsubmitted' ? (
                   <ApplicationForm applicationForm={applicationForm} setApplication={setApplication} />
                 ) : (
                   <Redirect to={`${path}/status`} />
