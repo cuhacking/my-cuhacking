@@ -64,7 +64,7 @@ const Content = ({ appStatus, isMinor }) => {
         <>
           <p>Your application is</p>
           <h1>Unstarted</h1>
-          <p>Apply now! Applications close December 27 at 11:59pm EST.</p>
+          <p>Apply now! Applications close January 5 at 11:59pm EST.</p>
           <Button link to='/application/form' label='Apply' />
         </>
       )
