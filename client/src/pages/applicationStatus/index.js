@@ -60,28 +60,12 @@ const Content = ({ appStatus, isMinor }) => {
 
   switch (appStatus) {
     case 'unstarted':
-      // return (
-      //   <>
-      //     <p>Your application is</p>
-      //     <h1>Unstarted</h1>
-      //     <p>Apply now! Applications close December 27 at 11:59pm EST.</p>
-      //     <Button link to='/application/form' label='Apply' />
-      //   </>
-      // )
       return (
         <>
-          <p>Applications are now closed.</p>
-          <p>
-            We encourage you to keep an eye on our website and social media, as there will be many other events to
-            participate in during the year.
-          </p>
-          <p>Still want to be apart of cuHacking? Volunteer instead!</p>
-          <Button
-            external
-            link
-            to='https://docs.google.com/forms/d/e/1FAIpQLSeQjgCEb6PNZBK1PEm3rFA9EHkO7LmyxSSBNGLu16XzIY_B7Q/viewform'
-            label='Volunteer'
-          />
+          <p>Your application is</p>
+          <h1>Unstarted</h1>
+          <p>Apply now! Applications close December 27 at 11:59pm EST.</p>
+          <Button link to='/application/form' label='Apply' />
         </>
       )
     case 'unsubmitted':
