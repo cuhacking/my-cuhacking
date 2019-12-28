@@ -26,3 +26,4 @@ config.json
 firebase-*.json
 
 resumes/
+consentForms/

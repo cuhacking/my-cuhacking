@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet'
 import { BrowserRouter as Router, Route, Switch, Redirect, useRouteMatch } from 'react-router-dom'
 import useAuth from 'hooks/useAuth'
 import { ReactComponent as Spinner } from 'assets/spinner.svg'
+import ApplicationConsent from '../applicationConsent'
 import ApplicationForm from '../applicationForm'
 import ApplicationStatus from '../applicationStatus'
 import styles from './index.module.css'
@@ -11,11 +12,11 @@ import styles from './index.module.css'
 //   email: 'walskerw@gmail.com',
 //   role: 'user',
 //   uid: null,
-//   rsvp: {},
+//   consentForm: false,
 //   review: {
 //     wave: 2
 //   },
-//   appStatus: 'unsubmitted',
+//   appStatus: 'withdrawn',
 //   application: {
 //     basicInfo: {
 //       firstName: null,
@@ -60,14 +61,14 @@ import styles from './index.module.css'
 //     terms: {
 //       codeOfConduct: false,
 //       privacyPolicy: false,
-//       under18: false
+//       under18: true
 //     }
 //   }
 // }
 
 // const fakeFetch = () => {
 //   return new Promise((resolve, reject) => {
-//     setTimeout(() => resolve(fakeUser), 5000)
+//     setTimeout(() => resolve(fakeUser), 500)
 //   })
 // }
 
@@ -76,17 +77,19 @@ const Application = () => {
   const { path } = useRouteMatch()
   const [loading, setLoading] = useState(true)
   const [appStatus, setStatus] = useState(null)
+  const [consentFormStatus, setConsentStatus] = useState(false)
   const [applicationForm, setApplication] = useState({})
 
   useEffect(() => {
     const getStatus = async () => {
       const idToken = await auth.getToken()
       const response = await fetch(`${window.location.origin}/api/applications/${idToken}`)
-      const { application, status } = await response.json()
-      // const { application, appStatus: status } = await fakeFetch()
-      setStatus(status)
+      const { application, appStatus, consentForm } = await response.json()
+      // const { application, appStatus, consentForm } = await fakeFetch()
+      console.log('set!', appStatus, consentForm)
+      setStatus(appStatus)
+      setConsentStatus(consentForm || false) // OR false because not all applications have this field
       setApplication(application)
-      console.log('set!', status, application)
       setLoading(false)
     }
     getStatus()
@@ -104,12 +107,25 @@ const Application = () => {
       ) : (
         <Router>
           <Switch>
-            <Route path={`${path}/status`} render={() => <ApplicationStatus appStatus={appStatus} />} />
+            <Route
+              path={`${path}/status`}
+              render={() => <ApplicationStatus appStatus={appStatus} isMinor={applicationForm.terms.under18} />}
+            />
             <Route
               path={`${path}/form`}
               render={() =>
                 appStatus === 'unstarted' || appStatus === 'submitted' || appStatus === 'unsubmitted' ? (
                   <ApplicationForm applicationForm={applicationForm} setApplication={setApplication} />
+                ) : (
+                  <Redirect to={`${path}/status`} />
+                )
+              }
+            />
+            <Route
+              path={`${path}/consent`}
+              render={() =>
+                appStatus === 'accepted' && applicationForm.terms.under18 ? (
+                  <ApplicationConsent setStatus={setConsentStatus} />
                 ) : (
                   <Redirect to={`${path}/status`} />
                 )

@@ -40,6 +40,18 @@ Firestore.submitApplication = (uuid, application) => {
     .update({ appStatus: 'submitted', application })
 }
 
+Firestore.submitConsentForm = uuid => {
+  fb.collection('Users')
+    .doc(uuid)
+    .update({ consentForm: true })
+}
+
+Firestore.setStatus = (uuid, appStatus) => {
+  fb.collection('Users')
+    .doc(uuid)
+    .update({ appStatus })
+}
+
 Firestore.getApplicationWindow = async () => {
   return (
     await fb

@@ -23,7 +23,9 @@ ApplicationsController.getApplication = async (req, res, next) => {
 
     logger.debug(stringify(user))
     logger.verbose('Application retrieved')
-    return res.status(code).send({ application: user.application, status: user.appStatus })
+    return res
+      .status(code)
+      .send({ application: user.application, appStatus: user.appStatus, consentForm: user.consentForm })
   } catch (error) {
     logger.error(`Error retrieving application: ${error}`)
     next(error)
@@ -43,7 +45,7 @@ ApplicationsController.submitApplication = async (req, res, next) => {
       }
     })
 
-    logger.verbose('Application submitted!')
+    logger.verbose('Email sent!')
     return res.sendStatus(200)
   } catch (error) {
     logger.error(`Error submitting application: ${error}`)
@@ -51,22 +53,37 @@ ApplicationsController.submitApplication = async (req, res, next) => {
   }
 }
 
+ApplicationsController.submitConsentForm = (req, res, next) => {
+  try {
+    const { uuid } = req.locals
+    const { consentForm } = req.body
+
+    logger.verbose(`Consent form received for ${uuid}. Marking as attending...`)
+
+    Firestore.submitConsentForm(uuid, consentForm)
+    Firestore.setStatus(uuid, 'attending')
+
+    logger.verbose(`Application status for ${uuid} set to 'attending'`)
+    return res.sendStatus(200)
+  } catch (error) {
+    logger.error(`Error setting status during consent form submission: ${error}`)
+    next(error)
+  }
+}
+
+// TODO: This is a dangerous endpoint. If a user find out they can post while authed, they could change their status to whatever they want
 ApplicationsController.setStatus = (req, res, next) => {
   try {
     const { uuid } = req.locals
+    logger.debug(stringify(req.body))
     const { status } = req.body
 
-    logger.verbose(`Setting application status for ${uuid} to ${status}`)
+    logger.debug(stringify(req.body))
+    logger.verbose(`Setting status for ${uuid} to '${status}'`)
 
-    switch (status) {
-      case 'unsubmitted':
-        Firestore.startApplication(uuid)
+    Firestore.setStatus(uuid, status)
 
-      case 'submitted':
-        Firestore.submitApplication(uuid)
-    }
-
-    logger.verbose(`Application status for ${uuid} set to ${status}`)
+    logger.verbose(`Application status for ${uuid} set to '${status}`)
     return res.sendStatus(200)
   } catch (error) {
     logger.error(`Error setting status: ${error}`)

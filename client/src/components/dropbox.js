@@ -4,12 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCloudUploadAlt, faFileAlt } from '@fortawesome/free-solid-svg-icons'
 import styles from './dropbox.module.css'
 
-const Dropbox = ({ resume, setResume }) => {
+const Dropbox = ({ file, storeFile, name, children }) => {
   const onDrop = useCallback(
     acceptedFiles => {
-      setResume(acceptedFiles[0])
+      storeFile(acceptedFiles[0])
     },
-    [setResume]
+    [storeFile]
   )
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -17,20 +17,20 @@ const Dropbox = ({ resume, setResume }) => {
     accept: 'application/pdf'
   })
 
-  if (!resume) {
+  if (!file) {
     return (
       <div {...getRootProps({ className: styles.emptyBox })}>
-        <input {...getInputProps({ name: 'resume' })} />
+        <input {...getInputProps({ name: name })} />
         <FontAwesomeIcon icon={faCloudUploadAlt} size='5x' />
-        <p>Drop your resume here, or click to select it. (PDF only)</p>
+        {children}
       </div>
     )
   } else {
     return (
-      <div className={styles.fullBox} onClick={() => setResume(undefined)}>
+      <div className={styles.fullBox} onClick={() => storeFile(undefined)}>
         <FontAwesomeIcon icon={faFileAlt} size='5x' />
         <p className={styles.file}>
-          <i>{resume.path}</i>
+          <i>{file.path}</i>
         </p>
       </div>
     )

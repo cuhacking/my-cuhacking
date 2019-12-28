@@ -8,13 +8,14 @@ const { init: initFirestore } = require('./model/firestore')
 const { init: initAuth } = require('./model/authentication')
 
 const { logger, stringify } = require('./helpers/logger')
-const { applications, status } = require('./routes')
+const { applications } = require('./routes')
 
 const env = process.env.PROD ? 'production' : 'development'
 const config = require('./config.json')[env]
 
 // Allow the server to parse JSON
 app.use(express.json({ limit: '5mb' }))
+app.use('/resources', express.static('./resources'))
 
 // Log each request the server receives
 app.use('*', (req, res, next) => {
@@ -49,11 +50,12 @@ app.get(/^\/(?!api).*/, (req, res) => {
 const backendRouter = express.Router()
 
 backendRouter.use('/applications', applications)
-backendRouter.use('/status', status)
 
 app.use('/api', backendRouter)
 
 const port = process.env.PORT || 3000
 app.listen(port)
 
-logger.info(`My cuHacking is listening on port ${port}${process.env.DEV ? ' in development mode' : ''}`)
+logger.info(
+  `My cuHacking is listening on port ${port}${process.env.PROD ? ' in production mode' : ' in development mode'}.`
+)
