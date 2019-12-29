@@ -41,7 +41,7 @@ ApplicationsController.submitApplication = async (req, res, next) => {
     await got(`https://cuhacking.com/mail/users/${req.body.email}`, {
       method: 'POST',
       json: {
-        tags: ['applied-2', '2020']
+        tags: ['applied-3', '2020']
       }
     })
 
