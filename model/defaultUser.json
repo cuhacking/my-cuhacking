@@ -1,11 +1,11 @@
 {
   "email": null,
+  "color": "red",
+  "wave": 3,
+  "name": null,
+  "longAnswerScore": null,
   "role": "user",
   "uid": null,
-  "rsvp": {},
-  "review": {
-    "wave": 3
-  },
   "appStatus": "unstarted",
   "application": {
     "basicInfo": {

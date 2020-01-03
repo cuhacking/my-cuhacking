@@ -13,9 +13,10 @@ import styles from './index.module.css'
 //   role: 'user',
 //   uid: null,
 //   consentForm: false,
-//   review: {
-//     wave: 2
-//   },
+//   color: "red",
+//   wave: 3,
+//   name: null,
+//   longAnswerScore: null,
 //   appStatus: 'withdrawn',
 //   application: {
 //     basicInfo: {
@@ -61,7 +62,7 @@ import styles from './index.module.css'
 //     terms: {
 //       codeOfConduct: false,
 //       privacyPolicy: false,
-//       under18: true
+//       under18: false
 //     }
 //   }
 // }
@@ -86,7 +87,7 @@ const Application = () => {
       const response = await fetch(`${window.location.origin}/api/applications/${idToken}`)
       const { application, appStatus, consentForm } = await response.json()
       // const { application, appStatus, consentForm } = await fakeFetch()
-      console.log('set!', appStatus, consentForm)
+
       setStatus(appStatus)
       setConsentStatus(consentForm || false) // OR false because not all applications have this field
       setApplication(application)

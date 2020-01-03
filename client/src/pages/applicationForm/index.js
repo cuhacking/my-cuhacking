@@ -129,6 +129,16 @@ const Application = ({ applicationForm, setApplication }) => {
         <h2>cuHacking 2020</h2>
         <h1>Application</h1>
         <form onSubmit={submitApplication} onChange={onChange} className={styles.formContainer}>
+          <div className={styles.section} style={{ paddingTop: 10, flexDirection: 'column' }}>
+            <p>
+              A shuttle from Toronto to Ottawa and back has been arranged (limited seating).{' '}
+              <strong>
+                <a href='https://forms.gle/DXbzSfQqa9Bfc6Yh9' target='_blank' rel='noopener noreferrer external'>
+                  Sign up here.
+                </a>{' '}
+              </strong>
+            </p>
+          </div>
           <div className={styles.section}>
             <Input
               defaultValue={basicInfo.firstName}
@@ -303,21 +313,14 @@ const Application = ({ applicationForm, setApplication }) => {
               required
             />
           </div>
-          <div className={styles.section} style={{ paddingTop: 10, flexDirection: 'column' }}>
-            <p>
-              We're looking at getting shuttles to transport hackers from other cities to cuHacking and back, however
-              they will be organized based on demand.
-            </p>
-            <strong>A shuttle has already been confirmed for Toronto (Union station).</strong>
-          </div>
-          <div className={styles.checkBoxSection}>
+          {/* <div className={styles.checkBoxSection}>
             <Input
               defaultChecked={personalInfo.wantsShuttle}
               inputStyle='checkbox'
               name='wantsShuttle'
               label="&nbsp; I'm interested in using a shuttle service from my city."
             />
-          </div>
+          </div> */}
           <div className={styles.section}>
             <Input
               defaultValue={skills.numHackathons}

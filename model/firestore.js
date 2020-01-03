@@ -3,6 +3,9 @@ const defaultUser = require('./defaultUser.json')
 
 const Firestore = module.exports
 
+let nextColor = 0
+const foodColors = ['red', 'blue', 'green', 'yellow']
+
 let fb
 Firestore.init = admin => {
   logger.verbose('Initializing Firestore')
@@ -37,7 +40,14 @@ Firestore.createApplication = async (uuid, email) => {
 Firestore.submitApplication = (uuid, application) => {
   fb.collection('Users')
     .doc(uuid)
-    .update({ appStatus: 'submitted', application })
+    .update({
+      appStatus: 'submitted',
+      color: foodColors[nextColor],
+      name: `${application.basicInfo.firstName.trim()} ${application.basicInfo.lastName.trim()}`,
+      application
+    })
+
+  nextColor = (nextColor + 1) % foodColors.length
 }
 
 Firestore.submitConsentForm = uuid => {

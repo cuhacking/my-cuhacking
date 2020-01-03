@@ -17,7 +17,7 @@ ApplicationsController.getApplication = async (req, res, next) => {
       code = 201
       logger.verbose('New applicant! Creating application...')
       const { email } = await Authentication.getUser(req.locals.uuid)
-      user = await Firestore.createApplication(req.locals.uuid, email)
+      user = await Firestore.createApplication(req.locals.uuid, email.toLowerCase())
       logger.verbose('Application created!')
     }
 
