@@ -40,6 +40,9 @@ admin.initializeApp({
 initFirestore(admin)
 initAuth(admin)
 
+// Enable autofill
+app.use('/.well-known', express.static('.well-known'));
+
 // Frontend
 app.use(express.static(path.join(__dirname, './client/build')))
 app.get(/^\/(?!api).*/, (req, res) => {
