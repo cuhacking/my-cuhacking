@@ -14,7 +14,7 @@ import styles from './index.module.css'
 //   uid: null,
 //   consentForm: false,
 //   color: "red",
-//   wave: 3,
+//   wave: 4,
 //   name: null,
 //   longAnswerScore: null,
 //   appStatus: 'withdrawn',
