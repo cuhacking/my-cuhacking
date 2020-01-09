@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import * as firebase from 'firebase/app'
 // import firebaseConfig from './firebase-config.json'
 import firebaseConfig from './firebase-config-dev.json'
-// TODO: Make it easy to switch back and forth between dev mode and prod for buidling
+// TODO: Make it easy to switch back and forth between dev mode and prod for building
 import { Application, Forgot, Login, NotFound, Register } from 'pages'
 import useAuth from 'hooks/useAuth'
 import './index.css'

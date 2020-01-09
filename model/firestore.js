@@ -41,7 +41,8 @@ Firestore.submitApplication = (uuid, application) => {
   fb.collection('Users')
     .doc(uuid)
     .update({
-      appStatus: 'submitted',
+      // appStatus: 'submitted',
+      appStatus: 'attending', // Changed to 'attending' because of walk-ins
       color: foodColors[nextColor],
       name: `${application.basicInfo.firstName.trim()} ${application.basicInfo.lastName.trim()}`,
       application

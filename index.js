@@ -8,7 +8,7 @@ const { init: initFirestore } = require('./model/firestore')
 const { init: initAuth } = require('./model/authentication')
 
 const { logger, stringify } = require('./helpers/logger')
-const { applications } = require('./routes')
+const { applications, badges } = require('./routes')
 
 const env = process.env.PROD ? 'production' : 'development'
 const config = require('./config.json')[env]
@@ -41,7 +41,7 @@ initFirestore(admin)
 initAuth(admin)
 
 // Enable autofill
-app.use('/.well-known', express.static('.well-known'));
+app.use('/.well-known', express.static('.well-known'))
 
 // Frontend
 app.use(express.static(path.join(__dirname, './client/build')))
@@ -53,6 +53,7 @@ app.get(/^\/(?!api).*/, (req, res) => {
 const backendRouter = express.Router()
 
 backendRouter.use('/applications', applications)
+backendRouter.use('/badges', badges)
 
 app.use('/api', backendRouter)
 

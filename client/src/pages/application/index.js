@@ -6,18 +6,19 @@ import { ReactComponent as Spinner } from 'assets/spinner.svg'
 import ApplicationConsent from '../applicationConsent'
 import ApplicationForm from '../applicationForm'
 import ApplicationStatus from '../applicationStatus'
+import ApplicationWalkIn from '../applicationWalkIn'
 import styles from './index.module.css'
 
 // const fakeUser = {
 //   email: 'walskerw@gmail.com',
 //   role: 'user',
-//   uid: null,
+//   uuid: '1l2k3j1lk2j31lkjjjjb1kh2b312jfy12j3hv12h3v',
 //   consentForm: false,
-//   color: "red",
+//   color: 'red',
 //   wave: 4,
-//   name: null,
+//   name: 'Wal Wal',
 //   longAnswerScore: null,
-//   appStatus: 'withdrawn',
+//   appStatus: 'attending',
 //   application: {
 //     basicInfo: {
 //       firstName: null,
@@ -80,17 +81,19 @@ const Application = () => {
   const [appStatus, setStatus] = useState(null)
   const [consentFormStatus, setConsentStatus] = useState(false)
   const [applicationForm, setApplication] = useState({})
+  const [id, setId] = useState({})
 
   useEffect(() => {
     const getStatus = async () => {
       const idToken = await auth.getToken()
       const response = await fetch(`${window.location.origin}/api/applications/${idToken}`)
-      const { application, appStatus, consentForm } = await response.json()
-      // const { application, appStatus, consentForm } = await fakeFetch()
+      const { application, appStatus, consentForm, name, uuid } = await response.json()
+      // const { application, appStatus, consentForm, name, uuid } = await fakeFetch()
 
       setStatus(appStatus)
       setConsentStatus(consentForm || false) // OR false because not all applications have this field
       setApplication(application)
+      setId({ name, uuid })
       setLoading(false)
     }
     getStatus()
@@ -110,15 +113,25 @@ const Application = () => {
           <Switch>
             <Route
               path={`${path}/status`}
-              render={() => <ApplicationStatus appStatus={appStatus} isMinor={applicationForm.terms.under18} />}
+              render={() => <ApplicationStatus appStatus={appStatus} isMinor={applicationForm.terms.under18} id={id} />}
             />
-            <Route
+            {/* <Route
               path={`${path}/form`}
               render={() =>
                 appStatus === 'unstarted' || appStatus === 'submitted' || appStatus === 'unsubmitted' ? (
                   <ApplicationForm applicationForm={applicationForm} setApplication={setApplication} />
                 ) : (
                   <Redirect to={`${path}/status`} />
+                )
+              }
+            /> */}
+            <Route
+              path={`${path}/walk-in`}
+              render={() =>
+                appStatus === 'accepted' || appStatus === 'attending' ? (
+                  <Redirect to={`${path}/status`} />
+                ) : (
+                  <ApplicationWalkIn applicationForm={applicationForm} setApplication={setApplication} />
                 )
               }
             />

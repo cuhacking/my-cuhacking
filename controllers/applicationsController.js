@@ -25,7 +25,13 @@ ApplicationsController.getApplication = async (req, res, next) => {
     logger.verbose('Application retrieved')
     return res
       .status(code)
-      .send({ application: user.application, appStatus: user.appStatus, consentForm: user.consentForm })
+      .send({
+        application: user.application,
+        appStatus: user.appStatus,
+        consentForm: user.consentForm,
+        name: user.name,
+        uuid: user.uid
+      })
   } catch (error) {
     logger.error(`Error retrieving application: ${error}`)
     next(error)
@@ -37,11 +43,19 @@ ApplicationsController.submitApplication = async (req, res, next) => {
     logger.verbose('Submitting application...')
     await Firestore.submitApplication(req.locals.uuid, JSON.parse(req.body.form))
 
-    logger.verbose('Application submitted! Sending email...')
+    logger.verbose('[DISABLED] Application submitted! Sending email...')
+    // await got(`https://cuhacking.com/mail/users/${req.body.email}`, {
+    //   method: 'POST',
+    //   json: {
+    //     tags: ['applied-3', '2020']
+    //   }
+    // })
+
+    logger.verbose('Registration form received! Sending email...')
     await got(`https://cuhacking.com/mail/users/${req.body.email}`, {
       method: 'POST',
       json: {
-        tags: ['applied-3', '2020']
+        tags: ['attending', '2020']
       }
     })
 
