@@ -43,7 +43,9 @@ const Consent = ({ setStatus }) => {
       <Navbar />
       <div className={styles.container}>
         <h2>cuHacking 2020</h2>
-        <h1>Parental Consent Form</h1>
+        <a download href='/resources/cuhacking_permission_form.pdf'>
+          <h1>Parental Consent Form</h1>
+        </a>
         <p>
           Since you have indicated your are under the age of 18 on your application form, you must fill out and upload a{' '}
           <a download href='/resources/cuhacking_permission_form.pdf'>
@@ -73,10 +75,8 @@ const Consent = ({ setStatus }) => {
         </form>
         <p className={styles.appealText}>
           If you’ve made a mistake, and you’re 18 years old or older. Send an email to{' '}
-          <a href='mailto:development@cuhacking.com?cc=operations@cuhacking.com&subject=Age of Majority Appeal'>
-            development@cuhacking.com
-          </a>{' '}
-          with the subject “Age of Majority Appeal” and we'll be able to help.
+          <a href='mailto:development@cuhacking.com?subject=Age of Majority Appeal'>development@cuhacking.com</a> with
+          the subject “Age of Majority Appeal” and we'll be able to help.
         </p>
       </div>
     </div>

@@ -64,19 +64,30 @@ const Content = ({ appStatus, isMinor, id }) => {
     case 'inReview':
     case 'accepted':
     case 'withdrawn':
-      return (
-        <>
-          <p>Your registration form is</p>
-          <h1>Complete!</h1>
-          <p>Confirm your attendance by pressing the button below.</p>
-          <Button onClick={rsvp} label="I'm attending" />
-          <p className={styles.disclaimer}>
-            By attending cuHacking, you agree to be photographed, videotaped, and/or interviewed for cuHacking
-            promotional material. You also are giving cuHacking the right to use and distribute any and all media from
-            the event with you in it.
-          </p>
-        </>
-      )
+      if (isMinor) {
+        return (
+          <>
+            <p>Your registration form is</p>
+            <h1>Complete!</h1>
+            <p>Only one more step to confirm your attendance.</p>
+            <Button link to='/application/consent' label='Consent Form' />
+          </>
+        )
+      } else {
+        return (
+          <>
+            <p>Your registration form is</p>
+            <h1>Complete!</h1>
+            <p>Confirm your attendance by pressing the button below.</p>
+            <Button onClick={rsvp} label="I'm attending" />
+            <p className={styles.disclaimer}>
+              By attending cuHacking, you agree to be photographed, videotaped, and/or interviewed for cuHacking
+              promotional material. You also are giving cuHacking the right to use and distribute any and all media from
+              the event with you in it.
+            </p>
+          </>
+        )
+      }
     case 'attending':
       return (
         <>
