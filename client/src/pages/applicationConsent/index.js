@@ -43,13 +43,11 @@ const Consent = ({ setStatus }) => {
       <Navbar />
       <div className={styles.container}>
         <h2>cuHacking 2020</h2>
-        <a download href='/resources/cuhacking_permission_form.pdf'>
-          <h1>Parental Consent Form</h1>
-        </a>
+        <h1>Parental Consent Form</h1>
         <p>
           Since you have indicated your are under the age of 18 on your application form, you must fill out and upload a{' '}
           <a download href='/resources/cuhacking_permission_form.pdf'>
-            Parental Consent Form
+            Parental Consent Form (download)
           </a>
           .
         </p>
