@@ -127,7 +127,7 @@ const Application = ({ applicationForm, setApplication }) => {
       <Navbar />
       <div className={styles.application}>
         <h2>cuHacking 2020</h2>
-        <h1>Registration</h1>
+        <h1>Information Form</h1>
         <form onSubmit={submitApplication} onChange={onChange} className={styles.formContainer}>
           {/* <div className={styles.section} style={{ paddingTop: 10, flexDirection: 'column' }}>
             <p>

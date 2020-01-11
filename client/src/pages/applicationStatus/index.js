@@ -97,13 +97,16 @@ const Content = ({ appStatus, isMinor, id }) => {
             <QRCode value={id.uuid} includeMargin size={256} />
           </a>
           <p>
-            Registration begins at 8:30am in{' '}
+            Check-in begins at 8:30am in{' '}
             <a href='https://carleton.ca/campus/map/#RB' target='_blank' rel='noopener noreferrer external'>
               Richcraft Hall
             </a>
             .
           </p>
-          <p>Use your personal QR code above to check-in at registration and into workshops.</p>
+          <p>Use your personal QR code above to check-in to the event and into workshops.</p>
+          <p>
+            Check out the schedule by going to the <a href='https://live.cuhacking.com/schedule'>event website</a>!
+          </p>
         </>
       )
     case 'unstarted':
@@ -113,8 +116,8 @@ const Content = ({ appStatus, isMinor, id }) => {
         <>
           <p>Your profile is</p>
           <h1>Unstarted</h1>
-          <p>Register now to attend the hackathon.</p>
-          <Button link to='/application/walk-in' label='Register' />
+          <p>Fill in your information to attend the hackathon.</p>
+          <Button link to='/application/walk-in' label='Information Form' />
         </>
       )
   }
