@@ -1,2 +1,2 @@
 # my-cuhacking
-project: ??? | The application portal for cuHacking
+project: Smeargle | The application portal for cuHacking
